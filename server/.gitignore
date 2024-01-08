@@ -1,0 +1,19 @@
+# Dependencias
+node_modules/
+
+# Archivos de entorno
+.env
+.env.local
+
+# Archivos de registro
+*.log
+
+# Directorios de producción
+dist/
+build/
+
+# Otros archivos y directorios que suelen ser específicos del sistema o del editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
