@@ -29,7 +29,7 @@ export const sendSPIAlert = async (req, res) => {
     // Configuración de las opciones del correo
     const mailOptions = {
       from: "pbarahona@syncroniza.net",
-      to: "pbarahonafullstack@gmail.com,pbarahona.tres@gmail.com,harenas@syncroniza.net",
+      to: "pbarahonafullstack@gmail.com,pbarahona.tres@gmail.com",
       subject: "SPI alert",
       text: message,
       html: `<h1> ${message}</h1> </br><p>Plataforma de Control Syncroniza</p> `,

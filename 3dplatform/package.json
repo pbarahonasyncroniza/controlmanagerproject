@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.3",
     "@syncfusion/ej2-data": "^24.1.41",
     "@syncfusion/ej2-react-buttons": "^23.2.7",
     "@syncfusion/ej2-react-gantt": "^23.2.7",
+    "@table-library/react-table-library": "^4.1.7",
     "axios": "^1.6.2",
     "bim-fragment": "1.0.22",
     "chart.js": "^4.4.1",
@@ -23,7 +25,8 @@
     "react-draggable": "^4.4.6",
     "react-router-dom": "^6.20.1",
     "recharts": "^2.10.3",
-    "three": "^0.156.1"
+    "three": "^0.156.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

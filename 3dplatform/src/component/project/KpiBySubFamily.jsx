@@ -3,7 +3,7 @@ import { ViewerContext } from "../Context";
 import axios from "axios";
 import AlertMail from "../AlertMail";
 
-const KpiProjects = () => {
+const KpiBySubFamily = () => {
   const [showAlert, setShowAlert] = useState(false);
   const { filters, getDataBudget, selectedProject, filterType } =
     useContext(ViewerContext);
@@ -19,23 +19,28 @@ const KpiProjects = () => {
       return itemValue.includes(filterValue);
     });
   });
+  // console.log("🚀 ~ filteredData ~ filteredData:", filteredData)
 
   // calcula la sumatoria por familia
   const calculateTotalForFamily = (family) => {
     if (!filteredData) {
+      console.log("🚀 ~ calculateTotalForFamily ~ filteredData:", filteredData);
       return 0;
     }
 
     const familyItems = filteredData.filter((items) => {
+      // console.log("🚀 ~ familyItems ~ items:", items)
       return (
         items.family && items.family.toLowerCase() === family.toLowerCase()
       );
     });
+    // console.log("🚀 ~ familyItems ~ familyItems:", familyItems)
 
     const totalSum = familyItems.reduce((sum, item) => {
       const totalPrice = Number(item.totalPrice);
       return isNaN(totalPrice) ? sum : sum + totalPrice;
     }, 0);
+    // console.log("🚀 ~ totalSum ~ totalSum:", totalSum)
 
     const formattedTotal = totalSum.toLocaleString(undefined, {
       minimumFractionDigits: 2,
@@ -53,9 +58,8 @@ const KpiProjects = () => {
       (sheet) => sheet.family.toLowerCase() === filterType.toLowerCase()
     );
   }
-  console.log("filteredSheets", filteredSheets);
-  console.log("selectedProject", selectedProject);
-
+  // console.log("filteredSheets", filteredSheets);
+  // console.log("selectedProject", selectedProject);
 
   const actualCost = filteredSheets.reduce((acc, current) => {
     const totalValue = typeof current.total === "number" ? current.total : 0;
@@ -66,6 +70,7 @@ const KpiProjects = () => {
   const totalFamily = calculateTotalForFamily(filters.family);
   const totalFamilyString =
     typeof totalFamily === "string" ? totalFamily : totalFamily.toString();
+  // console.log("🚀 ~ KpiByFamily ~ totalFamily:", totalFamily)
   const normalizedTotalForFamily = parseFloat(
     totalFamilyString.replace(/[^\d,]/g, "").replace(",", ".")
   );
@@ -92,8 +97,10 @@ const KpiProjects = () => {
     const checkSPIAndSendAlert = async () => {
       if (SPI < 1) {
         try {
-          const projectId=selectedProject?.projectId || "Project name not found"
-          const projectName=selectedProject?.projectName || "Project name not found"
+          const projectId =
+            selectedProject?.projectId || "Project name not found";
+          const projectName =
+            selectedProject?.projectName || "Project name not found";
           const familyAffected = filterType;
           const message = `SPI menor a 1 correspondiente a la familia ${familyAffected} en el projecto ${projectName} ${projectId} `;
           await sendAPIAlert(message, familyAffected);
@@ -182,4 +189,4 @@ const KpiProjects = () => {
   );
 };
 
-export default KpiProjects;
+export default KpiBySubFamily;

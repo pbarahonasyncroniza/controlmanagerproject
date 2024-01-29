@@ -6,11 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      color:{
-        primary:"#1A98FF",
-      }
-
-
+      backgroundColor: { // Agrega la clase de fondo personalizada
+        'custom': '#fffff', // Reemplaza con tu color deseado
+      },
     },
   },
   plugins: [],

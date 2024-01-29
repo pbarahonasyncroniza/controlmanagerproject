@@ -60,6 +60,8 @@ export function handleCreateBudgetError(res, error) {
   console.error(error);
   res.status(500).json({ error: 'Error al procesar la solicitud.' });
 }
+
+// Funcion que toma archivo excel de carga masiva y lo lleva a BD
 export function createBudget(req, res) {
   
   let data = req.body;

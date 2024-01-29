@@ -1,15 +1,15 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import axios from "axios";
 import { ViewerContext } from "../Context";
 
 const DataControlSheet = () => {
-  const { getDataSheet, updategetDataSheet } = useContext(ViewerContext);
+  const {  updategetDataSheet } = useContext(ViewerContext);
 
   useEffect(() => {
     const getDataSheetControl = async () => {
       try {
         const response = await axios.get("http://localhost:8000/sheet");
-        console.log("responsegetDataSheetControl", response.data.result);
+        // console.log("responsegetDataSheetControl", response.data.result);
 
         if (
           Array.isArray(response.data.result) &&

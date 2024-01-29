@@ -27,7 +27,7 @@ const MainAreaChart = () => {
     const fetchProgress = async () => {
       try {
         const response = await axios.get("http://localhost:8000/admin");
-        console.log("respuesta del servidr", response.data);
+        // console.log("respuesta del servidr", response.data);
         if (
           Array.isArray(response.data.data) &&
           response.data.data.length > 0

@@ -8,6 +8,10 @@ import sheetRoutes from "./routes/controlsheet.routes.js";
 import projectRoutes from "./routes/project.routes.js";
 import budgettRoutes from "./routes/budget.routes.js";
 import mailRoutes from "./routes/mail.routes.js";
+import laborRoutes from "./routes/laborcost.routes.js";
+import contractRoutes from "./routes/contract.routes.js";
+import increasediscountRoutes from "./routes/increasediscount.routes.js";
+import invoicesRoutes from "./routes/invoices.routes.js";
 
 const app = express();
 
@@ -33,6 +37,12 @@ sheetRoutes(app);
 projectRoutes(app);
 budgettRoutes(app);
 mailRoutes(app)
+laborRoutes(app);
+contractRoutes(app)
+increasediscountRoutes(app)
+invoicesRoutes(app)
+
+
 
 
 mongoConnect().then(() => {

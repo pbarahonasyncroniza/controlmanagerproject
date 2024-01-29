@@ -15,10 +15,31 @@ const ViewerProvider = ({ children }) => {
   const [filterType, setFilterType] = useState("");
   const [getDataBudget, setGetDataBudget] = useState([]);
   const [totalBudget, setTotalBudget] = useState([]);
-  const [filteredProjectId, setFilteredProjectId] = useState("A-601");
+  const [filteredProjectId, setFilteredProjectId] = useState("PT-101");
   const [isModalOpen, setIsMoldalOpen] = useState(false);
   const [isModalOpenBudget, setIsModalOpenBudget] = useState(false);
   const [getDataSheet, setGetDataSheet] = useState([]);
+  const [dataNode, setDataNode] = useState({ nodes: [] });
+  const [selectedSubfamily, setSelectedSubfamily] = useState(
+    "Elegir Hoja de Control"
+  );
+  const [data, setData] = useState({ nodes: [] });
+  const [acumuladoTotal, setAcumuladoTotal] = useState(0);
+  const [selectedFamily, setSelectedFamily] = useState("");
+  const [materialSheets, setMaterialSheets] = useState([]);
+  const [projectId, setProjectId] = useState("");
+  const [date, setDate] = useState("");
+  const [acumuladoActualTotal, setAcumuladoActualTotal] = useState(0);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [currentSheetId, setCurrentSheetId] = useState(null);
+  const [formSubmitted, setFormSubmitted] = useState({});
+  const [invoicesdata, setInvoicesData] = useState([]);
+  const [accumatedValue, setAccumatedValue] = useState(0);
+
+  const [dataIncreaseDiscount, setDataIncreaseDiscount] = useState({
+    nodes: [],
+  });
+
   const [filters, setFilters] = useState({
     projectId: "",
     cod: "",
@@ -92,8 +113,21 @@ const ViewerProvider = ({ children }) => {
   const updategetDataSheet = (newUpdategetDataSheet) => {
     setGetDataSheet(newUpdategetDataSheet);
   };
+  const updateDataNode = (newUpdaDataNode) => {
+    setDataNode(newUpdaDataNode);
+  };
 
+  const getTotalProyectado = () => {
+    return data.nodes.reduce((total, node) => {
+      return total + (Number(node.Proyectado) || 0);
+    }, 0);
+  };
 
+  const getTotalRecuperable = () => {
+    return dataIncreaseDiscount.nodes.reduce((total, node) => {
+      return total + (Number(node.Recuperable) || 0);
+    }, 0);
+  };
 
   return (
     <ViewerContext.Provider
@@ -142,7 +176,40 @@ const ViewerProvider = ({ children }) => {
         setIsModalOpenBudget,
         isModalOpenBudget,
         getDataSheet,
-        updategetDataSheet
+        updategetDataSheet,
+        dataNode,
+        setDataNode,
+        updateDataNode,
+        selectedSubfamily,
+        setSelectedSubfamily,
+        getTotalProyectado,
+        data,
+        setData,
+        getTotalRecuperable,
+        dataIncreaseDiscount,
+        setDataIncreaseDiscount,
+        acumuladoTotal,
+        setAcumuladoTotal,
+        selectedFamily,
+        setSelectedFamily,
+        materialSheets,
+        setMaterialSheets,
+        acumuladoActualTotal,
+        setAcumuladoActualTotal,
+        projectId,
+        setProjectId,
+        date,
+        setDate,
+        isEditMode,
+        setIsEditMode,
+        currentSheetId,
+        setCurrentSheetId,
+        formSubmitted,
+        setFormSubmitted,
+        invoicesdata,
+        setInvoicesData,
+        accumatedValue,
+        setAccumatedValue,
       }}>
       {children}
     </ViewerContext.Provider>

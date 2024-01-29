@@ -15,7 +15,7 @@ const BudgetSchema = new mongoose.Schema(
       type: String,
     },
     qty: {
-      type: String,
+      type: Number,
     },
     unitPrice: {
       type: Number,
@@ -26,10 +26,16 @@ const BudgetSchema = new mongoose.Schema(
     family: {
       type: String,
     },
+    subfamily: {
+      type: String,
+    },
+    // item: {
+    //   type: String,
+    // },
   },
   {
     timestamps: true,
   }
 );
 
-export const BudgetModel = mongoose.model("Uploadbudget", BudgetSchema);
+export const BudgetModel = mongoose.model("Uploadbudgetcost", BudgetSchema);

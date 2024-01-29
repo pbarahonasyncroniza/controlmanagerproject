@@ -15,7 +15,7 @@ const SideBar = () => {
         <SimpliClipper />
         <Dimensions />
         <PlantsComponent />
-        <Link className="ml-2 flex mt-2 mr-2 gap-2" to={"/dashboard"}>
+        <Link className="ml-2 flex mt-2 mr-2 gap-2" to={"/"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -29,7 +29,7 @@ const SideBar = () => {
               d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
             />
           </svg>
-          Dashborad
+          Volve a Panel Central 
         </Link>
       </nav>
     </div>

@@ -10,15 +10,12 @@ const ControlsheetSchema = new mongoose.Schema(
     },
     family: {
       type: String,
-      required: [true, "family requiere"],
     },
     cod: {
       type: String,
-      required: [true, "ID requiere"],
     },
     description: {
       type: String,
-      required: [true, "must have name"],
     },
     qty: {
       type: Number,
@@ -29,15 +26,15 @@ const ControlsheetSchema = new mongoose.Schema(
     },
     unitPrice: {
       type: Number,
-      default: null,
     },
     subcontractorOffers: {
       type: String,
-      default: null,
     },
     total: {
       type: Number,
-      default: null,
+    },
+    subfamily: {
+      type: String,
     },
     proposal1: {
       type: String,
@@ -58,6 +55,6 @@ const ControlsheetSchema = new mongoose.Schema(
 );
 
 export const ControlSheetModel = mongoose.model(
-  "ControlSheet",
+  "ControlSheetbudget",
   ControlsheetSchema
 );

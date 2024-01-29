@@ -4,8 +4,8 @@ import FormBudget from "../component/sheetcontrol/FormBudget";
 import ProjectData from "../component/project/ProjectData";
 import BudgetAvailable from "../component/project/BudgetAvailable";
 import ProjectInformation from "../component/project/ProjectInformation";
-import KpiProjects from "../component/project/KpiProjects";
 import DataControlSheet from "../component/sheetcontrol/DataControlSheet";
+import KpiByFamily from "../component/project/KpiByFamily";
 const ControlSheetMain = () => {
   return (
     <div className="flex ">
@@ -16,13 +16,14 @@ const ControlSheetMain = () => {
         <ControlSheet />
         <ProjectInformation />
         <BudgetAvailable />
-       
+        <KpiByFamily />
+
+
         <div className="mt-4 ml-2">
           <FormBudget />
           <ProjectData />
         </div>
       </div>
-      <KpiProjects />
       <DataControlSheet />
     </div>
   );
