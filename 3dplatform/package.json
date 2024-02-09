@@ -11,9 +11,6 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
-    "@syncfusion/ej2-data": "^24.1.41",
-    "@syncfusion/ej2-react-buttons": "^23.2.7",
-    "@syncfusion/ej2-react-gantt": "^23.2.7",
     "@table-library/react-table-library": "^4.1.7",
     "axios": "^1.6.2",
     "bim-fragment": "1.0.22",

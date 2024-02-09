@@ -1,35 +1,36 @@
 import { useEffect, useContext } from "react";
 import axios from "axios";
-import { ViewerContext } from "../Context";
-import Exceltransform from "../Exceltransform";
-
+import { ViewerContext } from "../component/Context";
+import Exceltransform from "../component/Exceltransform";
+import Sidebardb from "../component/dashboard/Sidebardb";
+import { AreaChart } from "recharts";
+import LineChart from "../component/charts/LineChart";
 const ProjectData = () => {
   const {
     projects,
-    setProjectId,
     setProjects,
     selectedProject,
-    setSelectedProject: updateSelectedProject,
+    setSelectedProject,
     selectedProjectId,
     filterType,
     setFilterType,
     isModalOpenBudget,
     setIsModalOpenBudget,
-    setDate,
-    setCurrentSheetId,
-    updateisModalOpenBudget,
     setIsEditMode,
+    openEditForm,
+    formatCurrency,
   } = useContext(ViewerContext);
-  console.log("🚀 ~ ProjectData ~ selectedProject:", selectedProject);
 
-  const openModal = () => setIsModalOpenBudget(true);
+  const openModal = () => {
+    setIsModalOpenBudget(true);
+    setIsEditMode(false);
+  };
 
   useEffect(() => {
-    // Función para obtener proyectos junto con las sheets
+    // Función para obtener proyectos junto con las sheets .. sheets viene anodado en projects
     const fetchProjects = async () => {
       try {
         const response = await axios.get("http://localhost:8000/project/");
-        console.log("🚀 ~ fetchProjects ~ response:", response);
 
         if (
           Array.isArray(response.data.data) &&
@@ -39,10 +40,6 @@ const ProjectData = () => {
         } else {
           console.error("Empty array of projects", response);
         }
-        console.log(
-          "🚀 ~ fetchProjects ~ response.data.data:",
-          response.data.data
-        );
       } catch (error) {
         console.error("Error fetching projects", error);
       }
@@ -52,20 +49,24 @@ const ProjectData = () => {
   }, [setProjects, isModalOpenBudget]);
 
   const handleDeleteOC = async (sheetid) => {
+    const isConfirmed = window.confirm("¿Está seguro de que quiere borrar?");
+
+    if (!isConfirmed) {
+      return;
+    }
     try {
       const response = await axios.delete(
         `http://localhost:8000/sheet/${sheetid}`
       );
       if (response.status === 200) {
-        updateSelectedProject((prevSelectedProject) => {
-          // Crear una copia del objeto selectedProject
+        setSelectedProject((prevSelectedProject) => {
           const updatedProject = { ...prevSelectedProject };
 
           // Filtrar el array sheets para remover el elemento eliminado
           updatedProject.sheets = updatedProject.sheets.filter(
             (sheet) => sheet._id !== sheetid
           );
-          // Devolver el proyecto actualizado
+
           return updatedProject;
         });
       }
@@ -74,12 +75,12 @@ const ProjectData = () => {
     }
   };
 
+  // Encuentra el proyecto seleccionado basado en el ID
   useEffect(() => {
-    // Encuentra el proyecto seleccionado basado en el ID
     const project = projects.find((p) => p.projectId === selectedProjectId);
-    updateSelectedProject(project); // Actualiza el estado del proyecto seleccionado
-    // console.log("Selected Project:", project);
-  }, [selectedProjectId, projects]);
+    console.log("🚀 ~ useEffect ~ project:", project);
+    setSelectedProject(project); // Actualiza el estado del proyecto seleccionado
+  }, [setSelectedProject, projects]);
 
   // filtro de Actual Cost
   const filteredSheets =
@@ -89,46 +90,24 @@ const ProjectData = () => {
         : true
     ) || [];
 
-  // Formato de moneda
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-    });
-  };
+ 
 
   // formato de fecha
   const formatedDate = (isoDate) => {
     if (!isoDate) return "Fecha no disponible";
-
-    // Crear la fecha en base al isoDate
     const date = new Date(isoDate);
-
-    // Usar getUTC* en lugar de get* para obtener la fecha en UTC
     const day = date.getUTCDate();
     const month = date.getUTCMonth() + 1; // getUTCMonth() devuelve un índice basado en cero (0-11)
     const year = date.getUTCFullYear();
-
     // Formatea el día y el mes para asegurar que tengan dos dígitos
     const formattedDay = String(day).padStart(2, "0");
     const formattedMonth = String(month).padStart(2, "0");
-
-    // Retorna la fecha formateada como "día/mes/año"
     return `${formattedDay}/${formattedMonth}/${year}`;
-  };
-  const openEditForm = (sheet) => {
-    // Cargar los datos del registro en los campos del formulario
-    setProjectId(sheet.projectId);
-    setDate(sheet.date);
-    // ... y así con el resto de los campos
-    setIsEditMode(true);
-    setCurrentSheetId(sheet._id);
-    updateisModalOpenBudget(true);
   };
 
   return (
-    <div className="bg-white ml-2 mr-6   shadow-xl  rounded-xl overflow-y-auto">
+    <div className="bg-white ml-2 mr-6   shadow-xl  rounded-xl overflow-y-auto flex">
+      <Sidebardb />
       <div className="">
         <div className="bg-gray-300 "></div>
         <h1 className="text-xl ml-2 font-semibold">
@@ -298,6 +277,8 @@ const ProjectData = () => {
           </table>
         </div>
       </div>
+      < AreaChart />
+          <LineChart />
     </div>
   );
 };

@@ -1,18 +1,21 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ViewerContext } from "../Context";
 
 const Invoices = () => {
-  const { invoicesdata, selectedSubfamily, setAccumatedValue } =
-    useContext(ViewerContext);
-  
-
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 2,
-    });
-  };
+  const {
+    invoicesdata,
+    selectedSubfamily,
+    setAccumatedValue,
+    selectedProjectId,
+    formatCurrency,
+    selectedFamily,
+  } = useContext(ViewerContext);
+  const [newfilteredInvoices, setNewFilteredInvoices] = useState([]);
+  const [
+    totalPaidByProjectFamilySubfamily,
+    setTotalPaidByProjectFamilySubfamily,
+  ] = useState(0);
+  const[percentagePaid,setPercentagePaid] = useState([])
 
   const formatedDate = (isoDate) => {
     if (!isoDate) return "Fecha no disponible";
@@ -33,37 +36,47 @@ const Invoices = () => {
     return `${formattedDay}/${formattedMonth}/${year}`;
   };
 
+  // filtro por projectId familia y subfamilia y ademas el calculo acumulado
   useEffect(() => {
-
-    
     const filteredInvoices = invoicesdata.filter(
-      invoice => invoice.subfamily === selectedSubfamily
+      (invoice) =>
+        (!selectedProjectId || invoice.projectId === selectedProjectId) &&
+        (!selectedFamily || invoice.family === selectedFamily) &&
+        (!selectedSubfamily || invoice.subfamily === selectedSubfamily)
     );
-  
     let acumulado = 0;
-    filteredInvoices.map(invoice => {
+    const invoicesWithAccumulated = filteredInvoices.map((invoice) => {
       acumulado += parseFloat(invoice.totalInvoices) || 0;
       return { ...invoice, totalAcumulado: acumulado };
     });
-  
-    // Actualiza el estado con el valor acumulado final para la subfamilia seleccionada
+    const totalPaid = filteredInvoices
+      .filter((invoice) => invoice.invoiceStatus === "Pagado")
+      .reduce(
+        (sum, invoice) => sum + parseFloat(invoice.totalInvoices || 0),
+        0
+      );
+    // Calculamos el porcentaje pagado.
+    // Calculamos el total facturado de las facturas filtradas.
+    const totalInvoiced = filteredInvoices.reduce(
+      (sum, invoice) => sum + parseFloat(invoice.totalInvoices || 0),
+      0
+    );
+
+    const percentagePaid =
+      totalInvoiced > 0 ? (totalPaid / totalInvoiced) * 100 : 0;
+      setPercentagePaid(percentagePaid)
+
+
+    setTotalPaidByProjectFamilySubfamily(totalPaid);
+
+    setNewFilteredInvoices(invoicesWithAccumulated);
     setAccumatedValue(acumulado);
-  }, [selectedSubfamily, invoicesdata]);
-  
-  const filteredInvoices = invoicesdata.filter(
-    invoice => invoice.subfamily === selectedSubfamily
-  );
-  
-  let acumulado = 0;
-  const invoicesWithAccumulated = filteredInvoices.map(invoice => {
-    acumulado += parseFloat(invoice.totalInvoices) || 0;
-    return { ...invoice, totalAcumulado: acumulado };
-  });
-
-
+  }, [selectedSubfamily, invoicesdata, selectedProjectId]);
 
   return (
-    <div>
+    <div
+      className="grid grid-cols-[3fr_1fr]
+    ">
       <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">
         <thead className="sticky top-0 bg-cyan-700 text-white -z-3">
           <tr className="border border-slate-500 px-4 text-xl ">
@@ -95,7 +108,7 @@ const Invoices = () => {
               $ AcumuladoFactura
             </th>
             <th className="border border-slate-500 px-4  text-base ">
-              Fecha
+              Fecha Pago
             </th>
             <th className="border border-slate-500 px-4  text-base ">
               Estado Factura
@@ -107,50 +120,62 @@ const Invoices = () => {
           </tr>
         </thead>
         <tbody>
-          {invoicesWithAccumulated.map((item, invoice) => (
-            <tr key={invoice}>
+          {newfilteredInvoices.map((invoice) => (
+            <tr key={invoice._id}>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.projectId}
+                {invoice.projectId}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.family}
+                {invoice.family}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.subfamily}
+                {invoice.subfamily}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.invoices}
+                {invoice.invoices}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {formatedDate(item.dateInvoices)}
+                {formatedDate(invoice.dateInvoices)}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.subcontractorOffers}
+                {invoice.subcontractorOffers}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.description}
+                {invoice.description}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {formatCurrency(item.totalInvoices)}
+                {formatCurrency(invoice.totalInvoices)}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {formatCurrency(item.totalAcumulado)}
+                {formatCurrency(invoice.totalAcumulado)}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.dueDate}
+                {formatedDate(invoice.dueDate)}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.invoiceStatus}
+                {invoice.invoiceStatus}
               </td>
               <td className="border border-slate-500 px-4 text-base ">
-                {item.observations}
+                {invoice.observations}
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <div className=" ml-4 mr-8 mt-4 p-6 rounded-xl text-2xl text-white text-center shadow-lg  grid grid-cols-2">
+        <div className="mr-2 gap-2 bg-cyan-700 rounded-xl">
+          <h1>Total facturas Pagadas</h1>
+          <h1 className="text-2xl text-white text-center ">
+            {formatCurrency(totalPaidByProjectFamilySubfamily)}
+          </h1>
+        </div>
+        <div  className="mr-2 gap-2 bg-cyan-700 rounded-xl">
+          <h1>% Pagado</h1>
+{percentagePaid}
+
+        </div>
+      </div>
     </div>
   );
 };
-
 export default Invoices;

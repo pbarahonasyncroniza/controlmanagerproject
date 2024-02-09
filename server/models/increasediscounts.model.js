@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const IncreasediscountSchema = new mongoose.Schema(
   {
+    projectId: {
+      type: String,
+    },
     family: {
       type: String,
     },

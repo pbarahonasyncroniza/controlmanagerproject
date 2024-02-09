@@ -40,9 +40,7 @@ const MonthCostaLaborTable = () => {
     const groupedByMonth = {};
 
     manoobraData?.forEach((sheet) => {
-      console.log("🚀 ~ manoobraData?.forEach ~ sheet:", sheet);
       const date = new Date(sheet.date);
-      console.log("🚀 ~ manoobraData?.forEach ~ sheet.date:", sheet.date);
       const monthYear = `${date.getMonth() + 1}-${date.getFullYear()}`;
 
       if (!groupedByMonth[monthYear]) {
@@ -69,8 +67,6 @@ const MonthCostaLaborTable = () => {
         accumulatedReal: acumuladoReal,
       };
     });
-    console.log("🚀 ~ monthlyData ~ monthlyData:", monthlyData);
-
     setMonthlyCosts(monthlyData);
   }, [projects]);
 
@@ -96,17 +92,12 @@ const MonthCostaLaborTable = () => {
       }
     });
     const totalsByMonth = Object.keys(groupedByMonth).map((monthYear) => {
-      console.log("🚀 ~ totalsByMonth ~ groupedByMonth:", groupedByMonth);
-
       const { items, projectId } = groupedByMonth[monthYear];
 
       const totalLabor = items.reduce((sum, item) => {
         const value = Number(item.total || 0);
         return sum + value;
       }, 0);
-
-      // console.log("🚀 ~ totalsByMonth ~ totalLabor:", totalLabor);
-
       return {
         period: monthYear,
         totalLabor,
@@ -132,15 +123,12 @@ const MonthCostaLaborTable = () => {
 
     setTotalsWithAccumulated(totalsWithAccumulated);
   }, [dataNode]);
-  // console.log("🚀 ~ useEffect ~ totalsWithAccumulated:", totalsWithAccumulated);
-
   const combinedData = [];
 
   // Asumiendo que 'dataNode' y 'projects' ya están procesados en tus estados como 'totalsWithAccumulated' y 'monthlyCosts' respectivamente
 
   totalsWithAccumulated.forEach((item) => {
     const monthlyCost = monthlyCosts.find((cost) => {
-      // console.log("🚀 ~ totalsWithAccumulated.forEach ~ cost:", cost);
       return cost.monthYear === item.period;
     });
 

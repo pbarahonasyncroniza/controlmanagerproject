@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { ViewerContext } from "../Context";
 import axios from "axios";
 import { useTheme } from "@table-library/react-table-library/theme";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import {
   Table,
@@ -15,7 +15,13 @@ import {
 } from "@table-library/react-table-library/table";
 
 const ContractObservations = () => {
-  const { selectedSubfamily, data, setData } = useContext(ViewerContext);
+  const {
+    selectedSubfamily,
+    data,
+    setData,
+    formatCurrency,
+    selectedProjectId,
+  } = useContext(ViewerContext);
   const [editingRow, setEditingRow] = useState(null);
 
   const handleUpdate = (value, id, property) => {
@@ -64,7 +70,7 @@ const ContractObservations = () => {
     const family = subfamilyToFamilyMapping[selectedSubfamily] || ""; // Usa un valor por defecto si no hay coincidencia
 
     const newRow = {
-      id: uuidv4(), // esta id es para agregar filas es unica 
+      id: uuidv4(), // esta id es para agregar filas es unica
       family: family,
       subfamily: selectedSubfamily,
     };
@@ -81,10 +87,6 @@ const ContractObservations = () => {
 
       data.nodes
     );
-    console.log(
-      "🚀 ~ handleSubmitLaborCost ~ senddatacontract:",
-      senddatacontract
-    );
   };
 
   useEffect(() => {
@@ -97,7 +99,9 @@ const ContractObservations = () => {
         ) {
           const filteredData = response.data.data.filter(
             (item) =>
-              selectedSubfamily === "" || item.subfamily === selectedSubfamily
+              (!selectedProjectId || item.projectId === selectedProjectId) &&
+              (!selectedSubfamily === "" ||
+                item.subfamily === selectedSubfamily)
           );
           setData({ nodes: filteredData });
         } else {
@@ -109,15 +113,7 @@ const ContractObservations = () => {
     };
 
     fetchContract();
-  }, [selectedSubfamily]);
-
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-    });
-  };
+  }, [selectedSubfamily,selectedProjectId]);
 
   const theme = useTheme({
     HeaderRow: `
@@ -133,12 +129,6 @@ const ContractObservations = () => {
         }
       `,
   });
- // suma total proyectado de esta tabla 
-  const getTotalProyectado = () => {
-    return data.nodes.reduce((total, node) => {
-      return total + (Number(node.Proyectado) || 0);
-    }, 0);
-  };
 
   return (
     <div>
@@ -183,6 +173,7 @@ const ContractObservations = () => {
           <>
             <Header>
               <HeaderRow>
+                <HeaderCell>ProjectId</HeaderCell>
                 <HeaderCell>family</HeaderCell>
                 <HeaderCell>subfamily</HeaderCell>
                 <HeaderCell>Glosa</HeaderCell>
@@ -193,7 +184,23 @@ const ContractObservations = () => {
 
             <Body>
               {tableList.map((unic) => (
-                <Row key={unic.id} item={unic}>
+                <Row key={unic._id} item={unic}>
+                  <Cell>
+                    <input
+                      type="text"
+                      style={{
+                        width: "100%",
+                        border: "none",
+                        fontSize: "1rem",
+                        padding: 0,
+                        margin: 0,
+                      }}
+                      value={unic.projectId}
+                      onChange={(event) =>
+                        handleUpdate(event.target.value, unic.id, "projectId")
+                      }
+                    />
+                  </Cell>
                   <Cell>
                     <input
                       type="text"
@@ -289,11 +296,6 @@ const ContractObservations = () => {
           </>
         )}
       </Table>
-      <h1 className="text-xl font-semibold text-right mr-20">
-        {" "}
-        {formatCurrency(getTotalProyectado())}
-      </h1>
-      <div></div>
     </div>
   );
 };

@@ -2,11 +2,13 @@ import { useContext } from "react";
 import { ViewerContext } from "../Context";
 
 const IdentificationHeader = () => {
-  const { selectedFamily, selectedSubfamily, materialSheets } =
+  const { selectedFamily, selectedSubfamily, materialSheets , selectedProjectId} =
     useContext(ViewerContext);
 
   const aggregateData = (sheets) => {
     const groupedData = {};
+    
+    sheets = sheets.filter((sheet) => !selectedProjectId || sheet.projectId === selectedProjectId);
 
     sheets.forEach((sheet) => {
       if (
@@ -42,8 +44,8 @@ const IdentificationHeader = () => {
 
   const aggregatedSheets = aggregateData(materialSheets);
 
+  
   let totalGastado = 0;
-
   aggregatedSheets.forEach((project) => {
     Object.values(project.families)
       .filter(

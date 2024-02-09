@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import Modal from "../Modal";
 import axios from "axios";
 import { ViewerContext } from "../Context";
@@ -6,34 +6,54 @@ import { ViewerContext } from "../Context";
 const FormInvoices = () => {
   const {
     isModalOpenBudget,
-    updateisModalOpenBudget,
+    setIsModalOpenBudget,
     projectId,
     setProjectId,
-    setFormSubmitted,
+    isEditMode,
+    setIsEditMode,
+    curentIdInvoices,
+    invoices,
+    setInvoices,
+    dateInvoices,
+    setDateInvoices,
+    totalInvoices,
+    setTotalInvoices,
+    invoiceStatus,
+    setInvoiceStatus,
+    dueDate,
+    setDueDate,
+    observations,
+    setObservations,
+    family,
+    setFamily,
+    subfamily,
+    setSubfamily,
+    subcontractorOffers,
+    description,
+    setSubcontractorsOffers,
+    setDescription,
+    setInvoicesData,
+    
   } = useContext(ViewerContext);
+    console.log("🚀 ~ FormInvoices ~ curentIdInvoices:", curentIdInvoices);
 
-  const [family, setFamily] = useState("");
-  const [subfamily, setSubfamily] = useState("");
-  const [invoices, setInvoices] = useState("");
-  const [dateInvoices, setDateInvoices] = useState("");
-  const [subcontractorOffers, setSubcontractorsOffers] = useState("");
-  const [description, setDescription] = useState("");
-  const [totalInvoices, setTotalInvoices] = useState("");
-  const [invoiceStatus, setInvoiceStatus] = useState("Pendiente");
-  const [dueDate, setDueDate] = useState("");
-  const [observations, setObservations] = useState("");
+  // const closeModelInvoices = () => setIsModalOpenBudget(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
+  console.log("🚀 ~ FormInvoices ~ forceUpdate:", forceUpdate);
 
-  const closeModelInvoices = () => updateisModalOpenBudget(false);
+  const forceReRender = () => {
+    setForceUpdate((prev) => prev + 1); // Si estás usando un contador
+  };
 
-  const handleSubmitSheet = async (e) => {
+  const handleSubmitInvoices = async (e) => {
     e.preventDefault();
-    const sheetData = {
+    const invoiceData = {
       projectId: projectId || undefined,
       family: family || undefined,
       subfamily: subfamily || undefined,
       invoices: invoices || undefined,
       dateInvoices: dateInvoices || undefined,
-      subcontractorOffers: subcontractorOffers || undefined,
+      subcontractorOffers: subcontractorOffers,
       description: description || undefined,
       totalInvoices: totalInvoices || undefined,
       invoiceStatus: invoiceStatus || undefined,
@@ -41,47 +61,66 @@ const FormInvoices = () => {
       observations: observations || undefined,
     };
     try {
-      const response = await axios.post(
-        "http://localhost:8000/invoices/",
-        sheetData
-      );
-      console.log("🚀 ~ handleSubmitSheet ~ response:", response);
-      setFormSubmitted(true); // Establece formSubmitted a true
-    } catch (error) {
-      console.error("Error submitting sheet:", error);
+      if (isEditMode) {
+        // Asegúrate de que currentIdInvoices tiene el valor correcto
+        const response = await axios.patch(
+          `http://localhost:8000/invoices/${curentIdInvoices}`,
+          invoiceData
+        );
+        const invoice = response.data;
+        setInvoicesData((prevData) =>
+          prevData.map((items) =>
+            items._id === invoice._id ? { ...items, ...invoice } : items
+          )
+        );
+
+        // Aquí, después de una operación PATCH exitosa, también puedes establecer isEditMode en false si es necesario
+        setIsEditMode(false); // Esto reinicia el modo a no edición
+      } else {
+        const response = await axios.post(
+          "http://localhost:8000/invoices/",
+          invoiceData
+        );
+        const invoice = response.data;
+        setInvoicesData((prevData) => [...prevData, invoice]);
+        // No es necesario cambiar isEditMode aquí, ya que se asume que ya está en false para operaciones POST
+      }
+    resetForm()
+    } catch (err) {
+      console.error("Error submitting invoice:", err);
     }
   };
 
   // limpia formulario
   const resetForm = () => {
-    projectId("");
-    family("");
-    subfamily("");
-    invoices("");
-    dateInvoices("");
-    subcontractorOffers(1);
-    description("");
-    totalInvoices("");
-    invoiceStatus("");
-    dueDate("");
-    observations("");
+    setProjectId("");
+    setFamily("");
+    setSubfamily("");
+    setInvoices("");
+    setDateInvoices("");
+    setSubcontractorsOffers(1);
+    setDescription("");
+    setTotalInvoices("");
+    setInvoiceStatus("");
+    setDueDate("");
+    setObservations("");
   };
 
   const closeModalInvoices = () => {
-    updateisModalOpenBudget(false);
-    resetForm();
+    setIsModalOpenBudget(false);
+    setIsEditMode(false); // Restablece isEditMode a false aquí
+    resetForm();forceReRender()
+    // Asume que esta función restablece el resto del formulario
   };
-
+ 
+  
   return (
     <div className=" ">
-      <Modal
-        className=""
-        isOpen={isModalOpenBudget}
-        onClose={closeModelInvoices}>
+      <Modal className="" isOpen={isModalOpenBudget}>
         <h1 className="text-2xl font-blod mb-2 text-white">
           Ingreso de Facturas
         </h1>
-        <form className="" onSubmit={handleSubmitSheet}>
+        <form className="" onSubmit={handleSubmitInvoices}>
           <div className="bg-slate-900 ">
             <div className="flex gap-2 ">
               <div className="">
@@ -273,22 +312,21 @@ const FormInvoices = () => {
               </div>
             </div>
 
-              <div className="">
-                <label className="text-lg text-white font-bolt mb-2 ">
-                  estado factura
-                </label>
-                <select
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                  placeholder="Neto Factura"
-                  type="checkbox"
-                  name="invoiceStatus"
-                  value={invoiceStatus}
-                  onChange={(e) => setInvoiceStatus(e.target.value)}>
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Pagado">Pagado</option>
-                </select>
-              </div>
-            
+            <div className="">
+              <label className="text-lg text-white font-bolt mb-2 ">
+                estado factura
+              </label>
+              <select
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                placeholder="Neto Factura"
+                type="checkbox"
+                name="invoiceStatus"
+                value={invoiceStatus}
+                onChange={(e) => setInvoiceStatus(e.target.value)}>
+                <option value="Pendiente">Pendiente</option>
+                <option value="Pagado">Pagado</option>
+              </select>
+            </div>
 
             <div className="">
               <label className="text-lg text-white font-bolt mb-2 ">
@@ -306,7 +344,9 @@ const FormInvoices = () => {
           </div>
 
           <div className="flex justify-between">
-            <button className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2">
+            <button
+              className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2"
+              type="submit">
               Grabar
             </button>
             <button

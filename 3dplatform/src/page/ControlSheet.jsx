@@ -1,11 +1,11 @@
 import Sidebardb from "../component/dashboard/Sidebardb";
 import ControlSheet from "../component/sheetcontrol/ControlSheet";
 import FormBudget from "../component/sheetcontrol/FormBudget";
-import ProjectData from "../component/project/ProjectData";
 import BudgetAvailable from "../component/project/BudgetAvailable";
 import ProjectInformation from "../component/project/ProjectInformation";
 import DataControlSheet from "../component/sheetcontrol/DataControlSheet";
 import KpiByFamily from "../component/project/KpiByFamily";
+
 const ControlSheetMain = () => {
   return (
     <div className="flex ">
@@ -17,11 +17,8 @@ const ControlSheetMain = () => {
         <ProjectInformation />
         <BudgetAvailable />
         <KpiByFamily />
-
-
         <div className="mt-4 ml-2">
           <FormBudget />
-          <ProjectData />
         </div>
       </div>
       <DataControlSheet />

@@ -1,11 +1,10 @@
 import { useEffect, useContext } from "react";
 import { ViewerContext } from "../Context";
-import PieChartProgress from "../charts/PieChart";
 
 const ProjectInformation = () => {
   const {
     projects,
-    setSelectedProject: updateSelectetProject,
+    setSelectedProject,
     selectedProject,
     selectedProjectId,
     setSelectedProjectId: updateSelectedProjectId,
@@ -14,39 +13,29 @@ const ProjectInformation = () => {
     totalBudget,
     getDataSheet,
   } = useContext(ViewerContext);
-   
 
   const openModal = () => setIsMoldalOpen(true);
 
   useEffect(() => {
     const project = projects.find((p) => p.projectId === selectedProjectId);
-    updateSelectetProject(project);
-    // console.log("Selected Project:", project); // Depuración
-  }, [updateSelectedProjectId, projects]);
+    setSelectedProject(project);
+  }, [selectedProjectId, projects]);
 
   // filtro del total presupuestado de cada proyecto
   const filteredDataProject = totalBudget.filter((item) => {
     const passesProjectId =
-      !filteredProjectId || item.projectId === filteredProjectId;
+      !selectedProjectId || item.projectId === selectedProjectId;
 
     return passesProjectId;
   });
-
- // filtrar nombre del proyecto
- const projectName = projects.map(project =>project.projectName)
-  console.log("🚀 ~ ProjectInformation ~ projectName:", projectName);
-  
-  
 
   // filtro del costo Actual
   const filteredDataSheet = getDataSheet.filter((item) => {
     const passesProjectId =
-      !filteredProjectId || item.projectId === filteredProjectId;
+      !selectedProjectId || item.projectId === selectedProjectId;
 
     return passesProjectId;
   });
-
-  // console.log("filteredDataProjectPROJECTINFORMATION", filteredDataProject);
 
   const formatCurrency = (value) => {
     return Number(value).toLocaleString("es-Cl", {
@@ -56,25 +45,23 @@ const ProjectInformation = () => {
     });
   };
 
-  // funcion que calcula el costo total del proyecto
+  // funcion que filtra el costo total del proyecto
   const budgetAvailableProject = () => {
-    const filteredProjects = filteredDataProject.filter(
-      (item) => item.projectId === filteredProjectId
-    );
-    // console.log("filteredProjectsssss", filteredProjects);
+    const filteredProjects = filteredDataProject.filter((item) => {
+      return item.projectId === selectedProjectId;
+    });
+
     return filteredProjects.reduce(
       (total, item) => total + Number(item.totalBudget),
       0
     );
   };
-  // funcion que calcula es costo actual
+
+  // funcion que calcula es costo actual de las ordenes de compras
   const actualCostSheet = () => {
     const filteredSheets = filteredDataSheet.filter((item) => {
-      // console.log("🚀 ~ actualCostSheet ~ item:", item);
-      return item.projectId === filteredProjectId;
+      return item.projectId === selectedProjectId;
     });
-    // console.log("🚀 ~ actualCostSheet ~ filteredDataSheet:", filteredDataSheet);
-    // console.log("filteredSheets", filteredSheets);
     return filteredSheets.reduce(
       (total, item) => total + Number(item.totalSum),
       0
@@ -179,25 +166,31 @@ const ProjectInformation = () => {
             {filteredProjectId && filteredDataProject && (
               <div className="   text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl ">
                 <div className="text-xl mt-8 text-white ">Presupuesto: </div>
-                <div className="text-white">{projectName}</div>
-                <div className="text-3xl text-white mt-4">{formatCurrency(budgetAvailableProject())}</div>
+                <div className="text-3xl text-white mt-4">
+                  {formatCurrency(budgetAvailableProject())}
+                </div>
               </div>
             )}
           </div>
           <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-3">
-            <h1 className="text-xl mt-14 text-white">Gastado a la Fecha (OC) :</h1>
-            <div className="text-3xl text-white mt-4">{formatCurrency(actualCostSheet())}</div>
+            <h1 className="text-xl mt-14 text-white">
+              Gastado a la Fecha (OC) :
+            </h1>
+            <div className="text-3xl text-white mt-4">
+              {formatCurrency(actualCostSheet())}
+            </div>
           </div>
           <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-3 ">
             <h1 className=" text-xl mt-14 text-white">Disponible:</h1>
-            <div className="text-3xl text-white mt-4">{formatCurrency(differentBudget)}</div>
+            <div className="text-3xl text-white mt-4">
+              {formatCurrency(differentBudget)}
+            </div>
           </div>
           <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-4 ">
-            <h1 className=" text-xl mt-14 text-white">Avance:</h1>
+            <h1 className=" text-xl mt-14 text-white">% Gastado:</h1>
             <div className="text-3xl text-white mt-4 ">
               {formattedProgressBudget(progressBudget)}
             </div>
-            {/* <PieChartProgress /> */}
           </div>
         </div>
       </div>

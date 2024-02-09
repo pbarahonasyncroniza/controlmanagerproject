@@ -1,196 +1,127 @@
 import { useContext, useEffect, useState } from "react";
 import { ViewerContext } from "../Context";
 import ContractObservations from "../tables/ContractObservations";
-import Invoices from "./Invoices";
+import CarsInformationSheets from "./CarsInformationSheets";
 import IdentificationHeader from "./IdentificationHeader";
 import IncreasesAndDiscounts from "./IncreasesAndDiscounts";
+import Invoices from "./Invoices";
 import PurchaseOrderTable from "./PurchaseOrderTable";
 
 const MaterialSheetsControl = () => {
   const {
+    projectId,
     projects,
     getDataBudget,
     selectedSubfamily,
     setSelectedSubfamily,
-    getTotalProyectado,
-    getTotalRecuperable,
     selectedFamily,
     setMaterialSheets,
-    acumuladoActualTotal,
     accumatedValue,
+    setSelectedProjectId,
+    selectedProjectId,
+    setTotalBySubFamily,
   } = useContext(ViewerContext);
 
-  const [totalBySubFamily, setTotalBySubFamily] = useState({});
   const [familySubfamilyMap, setFamilySubfamilyMap] = useState({});
-
   useEffect(() => {
     const filteredSheets = projects
       .flatMap((project) => project.sheets || [])
       .filter((sheet) => {
+        const projectMatch = projectId === "" || sheet.projectId === projectId; // Nuevo filtro por projectId
         const familyMatch =
           selectedFamily === "" || sheet.family === selectedFamily;
         const subfamilyMatch =
           selectedSubfamily === "" || sheet.subfamily === selectedSubfamily;
-        return familyMatch && subfamilyMatch;
+        return projectMatch && familyMatch && subfamilyMatch; // Incluye el nuevo filtro en la condición
       });
 
     setMaterialSheets(filteredSheets);
-  }, [projects, selectedFamily, selectedSubfamily]);
+  }, [projects, selectedFamily, selectedSubfamily, projectId]); // Añade projectId como dependencia
 
-  //  selecciona subfamily y  suma de totales por subfamily que viene del budget
+  //  selecciona un projectId una subfamily y suma de totales por subfamily que viene del budget
   useEffect(() => {
-    const filteredData =
-      selectedSubfamily === ""
-        ? getDataBudget
-        : getDataBudget.filter((x) => x.subfamily === selectedSubfamily);
+    const filteredData = getDataBudget.filter((x) => {
+      const subfamilyMatch =
+        selectedSubfamily === "" || x.subfamily === selectedSubfamily;
+      const projectMatch = projectId === "" || x.projectId === projectId;
+      return subfamilyMatch && projectMatch;
+    });
 
     const totalsBySubfamily = {};
 
     filteredData.forEach((x) => {
       const subfamily = x.subfamily;
-
       if (totalsBySubfamily[subfamily]) {
         totalsBySubfamily[subfamily] += x.totalPrice;
       } else {
         totalsBySubfamily[subfamily] = x.totalPrice;
       }
     });
-    // devuelve el total por subfamily
+
     setTotalBySubFamily(totalsBySubfamily);
-  }, [getDataBudget, selectedSubfamily, selectedFamily]);
+  }, [getDataBudget, selectedSubfamily, projectId]); // Incluye projectId en la lista de dependencias
 
   useEffect(() => {
-    const map = {};
+    const mapa = {};
     getDataBudget.forEach((x) => {
-      if (!map[x.family]) {
-        map[x.family] = new Set();
+      if (!mapa[x.family]) {
+        mapa[x.family] = new Set();
       }
-      map[x.family].add(x.subfamily);
+      mapa[x.family].add(x.subfamily);
     });
 
-    setFamilySubfamilyMap(map); // Actualiza el estado con el nuevo mapa
+    setFamilySubfamilyMap(mapa); // Actualiza el estado con el nuevo mapa
   }, [getDataBudget]);
 
   const uniqueSubfamilies = Array.from(
-    new Set(getDataBudget.map((x) => x.subfamily))
+    new Set(getDataBudget.map((y) => y.subfamily))
   );
 
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-    });
-  };
-  useEffect(() => {
-    console.log(
-      "🚀 ~ Valor Acumulado Actualizado materialSheets:",
-      accumatedValue
-    );
-  }, [accumatedValue]);
+  useEffect(() => {}, [accumatedValue]);
 
-  
-  // calculo de totales acumulados que estan en la cabecera en tarjetas
-  const montoSubfamilia = totalBySubFamily[selectedSubfamily] || 0;
-  const totalProyectado = getTotalProyectado();
-  const totalRecuperable = getTotalRecuperable();
-  const totalconextras = montoSubfamilia + getTotalRecuperable();
-  const ahorro = totalconextras - totalProyectado;
-  const porpagar = totalProyectado - accumatedValue;
-  
   return (
     <div>
       <div className="text-xl text-center mt-4 font-semibold bg-white ml-3 mr-2 rounded-xl">
-        <h1>HOJAS DE CONTROL</h1>
+          <h1 className="text-2xl">HOJAS DE CONTROL</h1>
+          <div className="flex justify-center">
+            <h1 className="mt-5">Elegir Proyecto</h1>
         <select
           className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
-          value={selectedSubfamily}
-          onChange={(e) => setSelectedSubfamily(e.target.value)}>
-          <option className="" value="Elegir Hoja de Control">
-            Elegir Hoja de Control
-          </option>
-          {uniqueSubfamilies.map((subfamily) => (
-            <option key={subfamily} value={subfamily}>
-              {subfamily}
+          value={selectedProjectId} // Cambia esto para usar selectedProjectId
+          onChange={(e) => {
+            const newProjectId = e.target.value;
+            setSelectedProjectId(newProjectId); // Actualiza el projectId en el contexto o estado
+            // Aquí podrías resetear otros estados dependientes si es necesario
+          }}>
+          <option value="">Todos los Proyectos</option>
+          {projects.map((project) => (
+            <option key={project._id} value={project.id}>
+              {project.projectId}
             </option>
           ))}
         </select>
-      </div>
-      <IdentificationHeader />
-
-      <div className="mt-3 ml-4 mr-2">
-        <div className="bg-white mt-2 px-4 py-4 grid grid-cols-7 rounded-lg shadow-lg">
-          <div className="bg-cyan-700 ml-4 mr-8 mt-4 mb-4  p-6 rounded-xl text-white text-center shadow-xl">
-            <h1 className="text-lg font-semibold  text-white">
-              MONTO PROPUESTA{" "}
-            </h1>
-            <div>
-              {Object.entries(totalBySubFamily).map(([subfamily, total]) => (
-                <div key={subfamily}>
-                  <h2 className="text-3xl font-semibold mt-4  ">
-                  ${total.toLocaleString('es-CL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                  </h2>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <h1 className="text-lg font-semibold  text-white">
-              MONTO CONTRATO
-            </h1>
-            <h1 className="text-3xl font-semibold mt-4 text-white">
-              {formatCurrency(totalProyectado)}
-            </h1>
-          </div>
-
-          <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <h1 className="text-lg font-semibold  text-white">RECUPERABLE</h1>
-            <h1 className="text-3xl font-semibold  text-white mt-4">
-              {formatCurrency(totalRecuperable)}
-            </h1>
-          </div>
-          <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <h1 className="text-lg font-semibold  text-white">
-              TOTAL CON EXTRAS
-            </h1>
-            <h1 className="text-3xl font-semibold text-white mt-4">
-              {formatCurrency(totalconextras)}
-            </h1>
-          </div>
-
-          <div className="bg-green-400 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <h1 className="text-lg font-semibold  text-white">
-              AHORRO (Contrato - Total c/extras)
-            </h1>
-            <h1 className="text-3xl font-semibold mt-4 text-white">
-              {formatCurrency(ahorro)}
-            </h1>
-          </div>
-
-          <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <div className="text-lg font-semibold ">
-              <h1 className="text-lg font-semibold text-white">
-                PAGADO A LA FECHA <br />
-                (facturas)
-              
-              </h1>
-              <h1 className="text-3xl font-semibold mt-4 text-white">
-                {formatCurrency(accumatedValue)}
-              </h1>
-            </div>
-          </div>
-          <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-            <div className="text-lg font-semibold 5 text-white">
-              <h1 className="text-lg font-semibold text-white">
-                SALDO POR PAGAR
-              </h1>
-              <h1 className="text-3xl font-semibold mt-1 ">
-                {formatCurrency(porpagar)}
-              </h1>
-            </div>
+        </div>
+        <div>
+          <div className="flex justify-center">
+            <h1 className="mt-5">Elegir Hoja de Control</h1>
+          <select
+            className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
+            value={selectedSubfamily}
+            onChange={(e) => setSelectedSubfamily(e.target.value)}>
+            <option className="" value="Elegir Hoja de Control">
+              Elegir Hoja de Control
+            </option>
+            {uniqueSubfamilies.map((subfamily) => (
+              <option key={subfamily} value={subfamily}>
+                {subfamily}
+              </option>
+            ))}
+          </select>
           </div>
         </div>
       </div>
+      <IdentificationHeader />
+      <CarsInformationSheets />
       <div className="mt-3 ml-4  grid grid-cols-2 ">
         <div className="bg-white p-6 rounded-xl shadow-xl mr-2">
           <h1 className="text-xl font-semibold ">OBSERVACIONES AL CONTRATO</h1>
@@ -205,7 +136,6 @@ const MaterialSheetsControl = () => {
           </div>
         </div>
       </div>
-
       <div className="bg-white p-6 mt-3 ml-4 rounded-xl ">
         <h1 className="text-xl font-semibold ">FACTURAS</h1>
         <div className="  ">
@@ -218,8 +148,6 @@ const MaterialSheetsControl = () => {
           <PurchaseOrderTable />
         </div>
       </div>
-
-      <div></div>
     </div>
   );
 };

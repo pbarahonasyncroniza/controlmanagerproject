@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const ContractSchema = new mongoose.Schema(
   {
+    projectId: {
+      type: String,
+    },
     family: {
       type: String,
     },
@@ -24,6 +27,6 @@ const ContractSchema = new mongoose.Schema(
 );
 
 export const ContractModel = mongoose.model(
-  "Contractobservations",
+  "Contract",
   ContractSchema
 );

@@ -30,20 +30,18 @@ const ControlSheet = () => {
   return (
     <div className="">
       <div className="">
-        <div className="flex gap-2  mt-2">
-          
-        </div>
-
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className=""></div>
+        <Modal isOpen={isModalOpen} >
           <form onSubmit={handleUpdateProject}>
-            <div className=" grid grid-cols-1  gap-2">
-              <div className="bg-gray-200 ">
+            <div className="   ">
+              <h1 className="text-white text-xl">Crear Nuevo Projecto</h1>
+              <div className=" ">
                 <div className="">
-                  <label className="text-xl font-semibolt ml-4 ">
+                  <label className="text-lg font-semibolt ml-4 ">
                     ProjectId
                   </label>
                   <input
-                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex w-full mr-2 ml-2 text-white"
+                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
                     placeholder="ProjectId"
                     type="text"
                     name="projectId"
@@ -56,7 +54,7 @@ const ControlSheet = () => {
                     Project Name
                   </label>
                   <input
-                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex w-full mr-2 ml-2 text-white"
+                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
                     placeholder="Project name"
                     type="text"
                     name="projectname"
@@ -94,12 +92,17 @@ const ControlSheet = () => {
               </div>
             </div>
             <div className="flex justify-between">
-              <button className="bg-blue-500 rounded-xl text-white p-3 mt-2  mb-2">
+              <button 
+              className="bg-green-500 rounded-lg text-white p-1 mt-2  mb-2"
+              type="submit">
                 Submit Tasks
               </button>
               <button
-                onClick={closeModal}
-                className="bg-blue-500 rounded-xl text-white p-3 mt-2  mb-2">
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeModal();
+                }}
+                className="bg-red-500 rounded-xl text-white p-2 mt-2  mb-2">
                 Close Form
               </button>
             </div>

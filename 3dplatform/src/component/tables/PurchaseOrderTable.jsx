@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { ViewerContext } from "../Context";
-
+import { useContext, useEffect, useState } from "react";
 import {
   Table,
   Header,
@@ -13,10 +12,19 @@ import {
 import { useTheme } from "@table-library/react-table-library/theme";
 
 const PurchaseOrderTable = () => {
-  const { dataNode, materialSheets } = useContext(ViewerContext);
-  console.log("🚀 ~ PurchaseOrderTable ~ materialSheets:", materialSheets);
-  console.log("🚀 ~ PurchaseOrderTable ~ dataNode:", dataNode);
-
+  const {
+    dataNode,
+    materialSheets,
+    selectedSubfamily,
+    selectedProjectId,
+    selectedFamily,
+    formatCurrency,
+   
+  } = useContext(ViewerContext);
+  const [newfilteredMaterialSheets, setNewFilteredMaterialSheets] = useState(
+    []
+  );
+  const [newAccumulatedPurchaseOrders, setNewAccumulatedPurchaseOrders] = useState([])
   const theme = useTheme({
     HeaderRow: `
                 background-color: #eaf5fd;
@@ -31,13 +39,27 @@ const PurchaseOrderTable = () => {
                 }
               `,
   });
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
+
+  // Filtrar materialSheets según el proyecto, familia y subfamilia seleccionados
+  useEffect(() => {
+    const filteredMaterialSheet = materialSheets.filter((sheet) => {
+      const projectMatch =
+        !selectedProjectId || sheet.projectId === selectedProjectId;
+      const familyMatch = !selectedFamily || sheet.family === selectedFamily;
+      const subfamilyMatch =
+        !selectedSubfamily || sheet.subfamily === selectedSubfamily;
+      return projectMatch && familyMatch && subfamilyMatch;
     });
-  };
+    let acumulado = 0;
+    const MaterialSheetAccumulated = filteredMaterialSheet.map((sheet) => {
+      acumulado += parseFloat(sheet.total) || 0;
+      return { ...sheet, acumulado };
+    });
+
+    setNewFilteredMaterialSheets(MaterialSheetAccumulated);
+    setNewAccumulatedPurchaseOrders(acumulado);
+  }, [materialSheets, selectedProjectId, selectedFamily, selectedSubfamily]);
+
   return (
     <div>
       <div>
@@ -58,16 +80,16 @@ const PurchaseOrderTable = () => {
               </Header>
 
               <Body>
-                {materialSheets.map((x) => (
-                  <Row key={x._id} x={x}>
-                    <Cell>{x.projectId}</Cell>
-                    <Cell>{x.cod}</Cell>
-                    <Cell>{new Date(x.date).toLocaleDateString()}</Cell>
-                    <Cell>{x.description}</Cell>
-                    <Cell>{x.subcontractorOffers}</Cell>
-                    <Cell>{formatCurrency(x.total)}</Cell>
-                    <Cell>{x.acumulado}</Cell>
-                    <Cell>{x.subfamily}</Cell>
+                {newfilteredMaterialSheets.map((sheet) => (
+                  <Row key={sheet._id}>
+                    <Cell>{sheet.projectId}</Cell>
+                    <Cell>{sheet.cod}</Cell>
+                    <Cell>{new Date(sheet.date).toLocaleDateString()}</Cell>
+                    <Cell>{sheet.description}</Cell>
+                    <Cell>{sheet.subcontractorOffers}</Cell>
+                    <Cell>{formatCurrency(sheet.total)}</Cell>
+                    <Cell>{formatCurrency(sheet.acumulado)}</Cell>
+                    <Cell>{sheet.subfamily}</Cell>
                   </Row>
                 ))}
               </Body>

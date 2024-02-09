@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Modal from "../Modal";
 import axios from "axios";
 import { ViewerContext } from "../Context";
@@ -6,75 +6,66 @@ import { ViewerContext } from "../Context";
 const FormBudget = () => {
   const {
     isModalOpenBudget,
-    updateisModalOpenBudget,
+    setIsModalOpenBudget,
     projectId,
     setProjectId,
     date,
     setDate,
+    isEditMode,
+    currentSheetId,
+    family,
+    setFamily,
+    cod,
+    setCod,
+    description,
+    setDescription,
+    unit,
+    setUnit,
+    subcontractorOffers,
+    setSubcontractorsOffers,
+    qty,
+    setQty,
+    unitPrice,
+    setUnitPrice,
+    total,
+    setTotal,
+    subfamily,
+    setSubfamily,
   } = useContext(ViewerContext);
-
-  const [family, setFamily] = useState("");
-  const [cod, setCod] = useState("");
-  const [description, setDescription] = useState("");
-  const [unit, setUnit] = useState("");
-  const [subcontractorOffers, setSubcontractorsOffers] = useState("");
-  const [qty, setQty] = useState("");
-  const [unitPrice, setUnitPrice] = useState("");
-  const [total, setTotal] = useState("");
-  const [subfamily, setSubfamily] = useState("");
-  const [proposal1, setProposal1] = useState("");
-  const [proposal2, setProposal2] = useState("");
-  const [proposal3, setProposal3] = useState("");
-
-  const closeModalBudget = () => updateisModalOpenBudget(false);
-
   const handleSubmitSheet = async (e) => {
     e.preventDefault();
+
     const sheetData = {
-      projectId: projectId || undefined,
-      date: date || undefined,
-      family: family || undefined,
-      cod: cod || undefined,
-      description: description || undefined,
-      qty: qty || undefined,
-      unit: unit || undefined,
-      unitPrice: unitPrice || undefined,
-      subcontractorOffers: subcontractorOffers || undefined,
-      total: total || undefined,
-      subfamily: subfamily || undefined,
-      proposal1: proposal1 || undefined,
-      proposal2: proposal2 || undefined,
-      proposal3: proposal3 || undefined,
+      projectId: projectId,
+      date: date,
+      family: family,
+      cod: cod,
+      description: description,
+      qty: qty,
+      unit: unit,
+      unitPrice: unitPrice,
+      subcontractorOffers: subcontractorOffers,
+      total: total,
+      subfamily: subfamily,
     };
 
-    const response = await axios.post(
-      `http://localhost:8000/sheet/`,
+    try {
+      let response;
 
-      sheetData
-    );
-    console.log("🚀 ~ handleSubmitSheet ~ response:", response);
+      if (isEditMode) {
+        resetForm();
+        response = await axios.patch(
+          `http://localhost:8000/sheet/${currentSheetId}`,
+          sheetData
+        );
+      } else {
+        response = await axios.post("http://localhost:8000/sheet/", sheetData);
+      }
 
-    // try {
-    //   if (isEditMode) {
-    //     // Enviar una solicitud PATCH para actualizar
-    //     const response = await axios.patch(
-    //       `http://localhost:8000/sheet/${currentSheetId}`,
-    //       sheetData
-    //     );
-    //     console.log("🚀 ~ handleSubmitSheet ~ response:", response);
-    //     // ... manejar la respuesta
-    //   } else {
-    //     // Enviar una solicitud POST para crear
-    //     const response = await axios.post(
-    //       "http://localhost:8000/sheet/",
-    //       sheetData
-    //     );
-    //     console.log("🚀 ~ handleSubmitSheet ~ response:", response);
-    //     // ... manejar la respuesta
-    //   }
-    // } catch (err) {
-    //   console.error("Error submitting sheet:", err);
-    // }
+      closeModelBudget(); // Cierra el modal y limpia el formulario después de una operación exitosa
+    } catch (err) {
+      console.error("Error submitting sheet:", err);
+    }
   };
 
   // limpia formulario
@@ -90,33 +81,30 @@ const FormBudget = () => {
     setUnitPrice(0);
     setTotal(0);
     setSubfamily("");
-    setProposal1("");
-    setProposal2("");
-    setProposal3("");
   };
 
   const closeModelBudget = () => {
-    updateisModalOpenBudget(false);
-    resetForm();
+    setIsModalOpenBudget(false);
+    if (isEditMode) {
+      resetForm();
+    }
   };
 
   useEffect(() => {
-    if (!isModalOpenBudget) updateisModalOpenBudget(false);
-    resetForm();
-  }, [isModalOpenBudget]) |
-    useEffect(() => {
-      const numQuantity = Number(qty);
-      const numUnitPrice = Number(unitPrice);
+    const numQuantity = Number(qty);
+    const numUnitPrice = Number(unitPrice);
 
-      if (!isNaN(numQuantity) && numUnitPrice) {
-        setTotal(qty * unitPrice);
-      }
-    }, [qty, unitPrice]);
+    if (!isNaN(numQuantity) && numUnitPrice) {
+      setTotal(qty * unitPrice);
+    }
+  }, [qty, unitPrice]);
 
   return (
     <div className=" ">
-      <Modal className="" isOpen={isModalOpenBudget} onClose={closeModalBudget}>
-        <h1 className="text-2xl font-blod mb-2 text-white">Purchase Form</h1>
+      <Modal className="" isOpen={isModalOpenBudget}>
+        <h1 className="text-2xl font-blod mb-2 text-white">
+          {isEditMode ? "Modo Editar" : "Modo Crear"}
+        </h1>
         <form className="" onSubmit={handleSubmitSheet}>
           <div className="bg-slate-900 ">
             <div className="flex gap-2 ">
@@ -227,7 +215,7 @@ const FormBudget = () => {
                   Precio unitario
                 </label>
                 <input
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 p-2"
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2  text-white border-solid border-4 border-gray-500 p-2"
                   placeholder="Unit Price"
                   type="number"
                   name="unitprice "
@@ -342,7 +330,9 @@ const FormBudget = () => {
             </div>
           </div>
           <div className="flex justify-between">
-            <button className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2">
+            <button
+              className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2"
+              type="submit">
               Submit Tasks
             </button>
             <button

@@ -22,8 +22,6 @@ const CostLaborControlTable = () => {
   // console.log(nodes);
 
   const { dataNode, setDataNode } = useContext(ViewerContext);
-  console.log("🚀 ~ CostLaborControlTable ~ dataNode:", dataNode);
-
   const [search, setSearch] = useState("");
  
 
@@ -45,7 +43,6 @@ const CostLaborControlTable = () => {
           response.data.data.length > 0
         ) {
           setDataNode({ nodes: response.data.data });
-          // console.log("🚀 ~ fetchLabor ~ response.data.data:", response.data.data)
         } else {
           console.error("No se encontraron datos", response);
         }
@@ -63,8 +60,6 @@ const CostLaborControlTable = () => {
         item?.name?.toLowerCase().includes(search.toLowerCase())
       ) || [],
   };
-  // console.log("🚀 ~ CostLaborControlTable ~ dataNode:", dataNode);
-
   // console.log("filteredData", filteredData);
 
   //   const resize = { resizerHighlight: "#dde2eb", resizerWidth: 10 };
@@ -84,7 +79,6 @@ const CostLaborControlTable = () => {
       return {
         ...state,
         nodes: state.nodes.map((node) => {
-          console.log("🚀 ~ nodes:state.nodes.map ~ node:", node);
           if (node.id === id) {
             return { ...node, [property]: value };
           }
