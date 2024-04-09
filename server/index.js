@@ -12,6 +12,8 @@ import laborRoutes from "./routes/laborcost.routes.js";
 import contractRoutes from "./routes/contract.routes.js";
 import increasediscountRoutes from "./routes/increasediscount.routes.js";
 import invoicesRoutes from "./routes/invoices.routes.js";
+import payapplicationRoutes from "./routes/payapplication.routes.js";
+
 
 const app = express();
 
@@ -41,6 +43,7 @@ laborRoutes(app);
 contractRoutes(app)
 increasediscountRoutes(app)
 invoicesRoutes(app)
+payapplicationRoutes(app)
 
 
 

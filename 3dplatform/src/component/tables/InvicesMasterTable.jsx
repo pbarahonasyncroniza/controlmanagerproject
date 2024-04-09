@@ -7,7 +7,6 @@ import axios from "axios";
 const InvicesMasterTable = () => {
   const {
     setIsModalOpenBudget,
-
     invoicesdata,
     setInvoicesData,
     selectedSubfamily,
@@ -79,10 +78,10 @@ const InvicesMasterTable = () => {
   };
 
   return (
-    <div className="flex ">
+    <div className="flex">
       <Sidebardb />
       <FormInvoices />
-      <div className=" max-h-[800px] overflow-y-auto  b-4 bg-white mt-4 ml-3 p-4 rounded-xl ">
+      <div className=" overflow-y-auto b-4 bg-white mt-4 ml-3 p-4 rounded-xl ">
         <h1 className="text-xl text-center font-semibold">
           MAESTRO DE FACTURAS
         </h1>
@@ -106,6 +105,7 @@ const InvicesMasterTable = () => {
             </svg>{" "}
             Nuevo Registro
           </button>
+      
         </div>
 
         <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">

@@ -92,11 +92,11 @@ const CarsInformationSheets = () => {
   };
 
   return (
-    <div className="mt-3 ml-4 mr-2">
+    <div className="mt-3 ml-4 mr-2  ">
       <div className="bg-white mt-2 px-4 py-4 grid grid-cols-7 rounded-lg shadow-lg">
         <div className="bg-cyan-700 ml-4 mr-8 mt-4 mb-4  p-6 rounded-xl text-white text-center shadow-xl">
           <h1 className="text-lg font-semibold  text-white">
-            MONTO PROPUESTA{" "}
+            MONTO PROPUESTA
           </h1>
           <div>
             {Object.entries(newtotalbySubFamily).map(

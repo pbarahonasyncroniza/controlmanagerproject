@@ -3,6 +3,7 @@ import Modal from "../Modal";
 import axios from "axios";
 import { ViewerContext } from "../Context";
 
+
 const FormBudget = () => {
   const {
     isModalOpenBudget,
@@ -32,6 +33,8 @@ const FormBudget = () => {
     subfamily,
     setSubfamily,
   } = useContext(ViewerContext);
+
+
   const handleSubmitSheet = async (e) => {
     e.preventDefault();
 
@@ -50,16 +53,15 @@ const FormBudget = () => {
     };
 
     try {
-      let response;
-
+      
       if (isEditMode) {
         resetForm();
-        response = await axios.patch(
+        await axios.patch(
           `http://localhost:8000/sheet/${currentSheetId}`,
           sheetData
         );
       } else {
-        response = await axios.post("http://localhost:8000/sheet/", sheetData);
+         await axios.post("http://localhost:8000/sheet/", sheetData);
       }
 
       closeModelBudget(); // Cierra el modal y limpia el formulario después de una operación exitosa
@@ -97,7 +99,7 @@ const FormBudget = () => {
     if (!isNaN(numQuantity) && numUnitPrice) {
       setTotal(qty * unitPrice);
     }
-  }, [qty, unitPrice]);
+  }, [qty, unitPrice,setTotal]);
 
   return (
     <div className=" ">

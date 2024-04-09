@@ -1,17 +1,14 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
-import { ViewerContext } from "../component/Context";
-import Exceltransform from "../component/Exceltransform";
-import Sidebardb from "../component/dashboard/Sidebardb";
-import { AreaChart } from "recharts";
-import LineChart from "../component/charts/LineChart";
+import { ViewerContext } from "../Context";
+import Exceltransform from "../Exceltransform";
+import Sidebardb from "../dashboard/Sidebardb";
+import FormBudget from "./FormBudget";
+
 const ProjectData = () => {
   const {
-    projects,
     setProjects,
-    selectedProject,
     setSelectedProject,
-    selectedProjectId,
     filterType,
     setFilterType,
     isModalOpenBudget,
@@ -19,8 +16,11 @@ const ProjectData = () => {
     setIsEditMode,
     openEditForm,
     formatCurrency,
+    projects,
+    formatedDate,
   } = useContext(ViewerContext);
 
+  const [sllSheets, setAllSheets] = useState([]);
   const openModal = () => {
     setIsModalOpenBudget(true);
     setIsEditMode(false);
@@ -76,46 +76,41 @@ const ProjectData = () => {
   };
 
   // Encuentra el proyecto seleccionado basado en el ID
-  useEffect(() => {
-    const project = projects.find((p) => p.projectId === selectedProjectId);
-    console.log("🚀 ~ useEffect ~ project:", project);
-    setSelectedProject(project); // Actualiza el estado del proyecto seleccionado
-  }, [setSelectedProject, projects]);
+  // useEffect(() => {
+  //   const project = projects.find((p) => p.projectId === selectedProjectId);
+  //   setSelectedProject(project); // Actualiza el estado del proyecto seleccionado
+  // }, [setSelectedProject, projects]);
 
   // filtro de Actual Cost
-  const filteredSheets =
-    selectedProject?.sheets?.filter((sheet) =>
-      filterType
-        ? sheet.family.toLowerCase().includes(filterType.toLowerCase())
-        : true
-    ) || [];
+  // const filteredSheets =
+  //   selectedProject?.sheets?.filter((sheet) =>
+  //     filterType
+  //       ? sheet.family.toLowerCase().includes(filterType.toLowerCase())
+  //       : true
+  //   ) || [];
 
- 
+  useEffect(() => {
+    // Crear un nuevo arreglo para almacenar todas las sheets de todos los proyectos
+    let allSheets = [];
+    projects.forEach((project) => {
+      // Concatenar las sheets de cada proyecto al arreglo allSheets
+      allSheets = allSheets.concat(project.sheets);
+    });
 
-  // formato de fecha
-  const formatedDate = (isoDate) => {
-    if (!isoDate) return "Fecha no disponible";
-    const date = new Date(isoDate);
-    const day = date.getUTCDate();
-    const month = date.getUTCMonth() + 1; // getUTCMonth() devuelve un índice basado en cero (0-11)
-    const year = date.getUTCFullYear();
-    // Formatea el día y el mes para asegurar que tengan dos dígitos
-    const formattedDay = String(day).padStart(2, "0");
-    const formattedMonth = String(month).padStart(2, "0");
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  };
+    // Aquí suponemos que tienes un estado para almacenar todas las sheets recopiladas
+    setAllSheets(allSheets); // Asegúrate de tener un estado llamado allSheets definido para esto
+  }, [projects]); // Este efecto se ejecutará cada vez que el arreglo de proyectos cambie
 
   return (
-    <div className="bg-white ml-2 mr-6   shadow-xl  rounded-xl overflow-y-auto flex">
+    <div className=" ml-2 mr-6 mt-4 shadow-xl rounded-xl flex ">
       <Sidebardb />
-      <div className="">
-        <div className="bg-gray-300 "></div>
-        <h1 className="text-xl ml-2 font-semibold">
+      <FormBudget />
+      <div className="bg-white rounded-xl ml-4 mt-5 mb-6">
+        <h1 className="text-xl ml-8 font-semibold mt-4 text-center ">
           MAESTRO DE COMPRAS
-          <Exceltransform UrlEndpoint="http://localhost:8000/sheet/" />
         </h1>
         <div className="flex grow">
-          <div className="ml-2 text-lg bg-blue-500 text-white p-1 mt-2 w-50 rounded-lg ">
+          <div className="ml-10 mt-4 text-lg bg-blue-500 text-white p-1  w-50 rounded-lg ">
             <div>
               <label className="text-xs p-1" htmlFor="filterType">
                 Filter Type
@@ -132,7 +127,7 @@ const ProjectData = () => {
           <div className="">
             <button
               onClick={openModal}
-              className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
+              className="flex  bg-blue-500 mt-4 ml-4 p-2 text-white rounded-lg text-sm gap-2 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -151,7 +146,8 @@ const ProjectData = () => {
             </button>
           </div>
         </div>
-        <div className="max-h-[600px] overflow-y-auto mb-6 b-4">
+        <div className=" overflow-y-auto mb-4 ">
+          <Exceltransform UrlEndpoint="http://localhost:8000/sheet/" />
           <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">
             <thead className="sticky top-0 bg-cyan-700 text-white -z-3">
               <tr className="border border-slate-500 px-4 text-xl ">
@@ -197,7 +193,7 @@ const ProjectData = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredSheets.map((item, z) => (
+              {sllSheets.map((item, z) => (
                 <tr key={z}>
                   <td className="border border-slate-500 px-4 text-base ">
                     {item.projectId}
@@ -277,8 +273,6 @@ const ProjectData = () => {
           </table>
         </div>
       </div>
-      < AreaChart />
-          <LineChart />
     </div>
   );
 };

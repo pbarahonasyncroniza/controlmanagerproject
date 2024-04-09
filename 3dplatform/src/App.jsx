@@ -7,10 +7,9 @@ import LaborCostControl from "./page/LaborCostControl";
 import ViewerProvider from "./component/Context";
 import HojadeControl from "./page/HojadeControl";
 import InvicesMasterTable from "./component/tables/InvicesMasterTable";
-import ProjectData from "./page/ProjectData";
-
+import MainPurchaseOrdes from "./page/MainPurchaseOrdes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import PayApplication from "./page/PayApplication";
 function App() {
   return (
     <BrowserRouter>
@@ -31,7 +30,8 @@ function App() {
           <Route path="/Manodeobra" element={<LaborCostControl />} />
           <Route path="hojadecontrol" element={<HojadeControl />} />
           <Route path="masterfacturas" element={<InvicesMasterTable />} />
-          <Route path="oc" element={<ProjectData />} />
+          <Route path="oc" element={<MainPurchaseOrdes />} />
+          <Route path="eepp" element={<PayApplication />} />
         </Routes>
       </ViewerProvider>
     </BrowserRouter>

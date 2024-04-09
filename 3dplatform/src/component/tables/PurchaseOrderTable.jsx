@@ -61,7 +61,8 @@ const PurchaseOrderTable = () => {
   }, [materialSheets, selectedProjectId, selectedFamily, selectedSubfamily]);
 
   return (
-    <div>
+    <div className="bg-white p-3 rounded-xl ml-3 ">
+       <h1 className="text-xl font-semibold ">ORDENES DE COMPRA</h1>
       <div>
         <Table data={dataNode} theme={theme}>
           {() => (

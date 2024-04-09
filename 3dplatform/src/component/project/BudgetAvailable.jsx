@@ -12,12 +12,13 @@ const BudgetAvailable = () => {
     setTotalBudget,
     filteredProjectId,
     setFilteredProjectId,
+    formatCurrency,
   } = useContext(ViewerContext);
 
   useEffect(() => {
     const getBudgetData = async () => {
       const getDataResponse = await axios.get("http://localhost:8000/budget");
-     
+
       if (
         Array.isArray(getDataResponse.data.data) &&
         getDataResponse.data.data.length > 0
@@ -57,13 +58,6 @@ const BudgetAvailable = () => {
   //  console.log("filteredDataaaaaaaaaaa",filteredData)
 
   // controla el formato de la moneda
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 2,
-    });
-  };
 
   return (
     <div className="bg-slate-100 ml-4 mr-6 mt-4 shadow-lg  rounded-lg">
@@ -73,7 +67,7 @@ const BudgetAvailable = () => {
         CONTROL SHEETS PLANNED
       </h1> */}
       {/* <div className="flex mb-3"> */}
-        {/* <div className="">
+      {/* <div className="">
           <label className="ml-2 mt-5 text-sm bg-blue-500 text-white px-4 py-1 w-80 rounded-lg">
             Project Id
           </label>
@@ -85,7 +79,7 @@ const BudgetAvailable = () => {
               handlerFilterChange("projectId", e.target.value)
             }></input>
         </div> */}
-        {/* <div>
+      {/* <div>
           <div>
             <label className="ml-4 mt-5 text-sm bg-blue-500 text-white p-1 w-80 rounded-lg">
               Family

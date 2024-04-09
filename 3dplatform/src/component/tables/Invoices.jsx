@@ -15,7 +15,7 @@ const Invoices = () => {
     totalPaidByProjectFamilySubfamily,
     setTotalPaidByProjectFamilySubfamily,
   ] = useState(0);
-  const[percentagePaid,setPercentagePaid] = useState([])
+  const [percentagePaid, setPercentagePaid] = useState([]);
 
   const formatedDate = (isoDate) => {
     if (!isoDate) return "Fecha no disponible";
@@ -63,118 +63,125 @@ const Invoices = () => {
     );
 
     const percentagePaid =
-      totalInvoiced > 0 ? (totalPaid / totalInvoiced) * 100 : 0;
-      setPercentagePaid(percentagePaid)
-
+      totalInvoiced > 0 ? Number (((totalPaid / totalInvoiced) * 100).toFixed(2)) : 0;
+    setPercentagePaid(percentagePaid);
 
     setTotalPaidByProjectFamilySubfamily(totalPaid);
 
     setNewFilteredInvoices(invoicesWithAccumulated);
     setAccumatedValue(acumulado);
-  }, [selectedSubfamily, invoicesdata, selectedProjectId]);
+  }, [
+    selectedSubfamily,
+    invoicesdata,
+    selectedProjectId,
+    selectedFamily,
+    setPercentagePaid,
+    setTotalPaidByProjectFamilySubfamily,
+    setNewFilteredInvoices,
+    setAccumatedValue,
+  ]);
 
   return (
-    <div
-      className="grid grid-cols-[3fr_1fr]
-    ">
-      <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">
-        <thead className="sticky top-0 bg-cyan-700 text-white -z-3">
-          <tr className="border border-slate-500 px-4 text-xl ">
-            <th className="border border-slate-500 px-4 text-base  ">
-              ProjectId
-            </th>
-            <th className="border border-slate-500 px-4 text-base  ">
-              Familia
-            </th>
-            <th className="border border-slate-500 px-4 text-base  ">
-              SubFamila
-            </th>
-            <th className="border border-slate-500 px-4  text-base ">
-              N° Factura
-            </th>
-            <th className="border border-slate-500 px-4 text-base  ">
-              Fecha de emision
-            </th>
-            <th className="border border-slate-500 px-4  text-base">
-              Proveedor
-            </th>
-            <th className="border border-slate-500 px-4  text-base ">
-              Glosa/EEPP
-            </th>
-            <th className="border border-slate-500 px-4 text-base  ">
-              $ Factura
-            </th>
-            <th className="border border-slate-500 px-4 text-base  ">
-              $ AcumuladoFactura
-            </th>
-            <th className="border border-slate-500 px-4  text-base ">
-              Fecha Pago
-            </th>
-            <th className="border border-slate-500 px-4  text-base ">
-              Estado Factura
-            </th>
+    <div className="bg-white mt-3 mb-3 p-2 rounded-xl ml-3 ">
+        <h1 className="text-xl font-semibold ">FACTURAS</h1> 
+      <div className="grid grid-cols-[3fr_1fr] overflow-y-visible">
+        <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">
+          <thead className="sticky top-0 bg-cyan-700 text-white -z-3">
+            <tr className="border border-slate-500 px-4 text-xl ">
+              <th className="border border-slate-500 px-4 text-base  ">
+                ProjectId
+              </th>
+              <th className="border border-slate-500 px-4 text-base  ">
+                Familia
+              </th>
+              <th className="border border-slate-500 px-4 text-base  ">
+                SubFamila
+              </th>
+              <th className="border border-slate-500 px-4  text-base ">
+                N° Factura
+              </th>
+              <th className="border border-slate-500 px-4 text-base  ">
+                Fecha de emision
+              </th>
+              <th className="border border-slate-500 px-4  text-base">
+                Proveedor
+              </th>
+              <th className="border border-slate-500 px-4  text-base ">
+                Glosa/EEPP
+              </th>
+              <th className="border border-slate-500 px-4 text-base  ">
+                $ Factura
+              </th>
+              <th className="border border-slate-500 px-4 text-base  ">
+                $ AcumuladoFactura
+              </th>
+              <th className="border border-slate-500 px-4  text-base ">
+                Fecha Pago
+              </th>
+              <th className="border border-slate-500 px-4  text-base ">
+                Estado Factura
+              </th>
 
-            <th className="border border-slate-500 px-4  text-base ">
-              Observaciones
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {newfilteredInvoices.map((invoice) => (
-            <tr key={invoice._id}>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.projectId}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.family}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.subfamily}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.invoices}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {formatedDate(invoice.dateInvoices)}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.subcontractorOffers}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.description}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {formatCurrency(invoice.totalInvoices)}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {formatCurrency(invoice.totalAcumulado)}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {formatedDate(invoice.dueDate)}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.invoiceStatus}
-              </td>
-              <td className="border border-slate-500 px-4 text-base ">
-                {invoice.observations}
-              </td>
+              <th className="border border-slate-500 px-4  text-base ">
+                Observaciones
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className=" ml-4 mr-8 mt-4 p-6 rounded-xl text-2xl text-white text-center shadow-lg  grid grid-cols-2">
+          </thead>
+          <tbody>
+            {newfilteredInvoices.map((invoice) => (
+              <tr key={invoice._id}>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.projectId}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.family}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.subfamily}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.invoices}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {formatedDate(invoice.dateInvoices)}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.subcontractorOffers}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.description}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {formatCurrency(invoice.totalInvoices)}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {formatCurrency(invoice.totalAcumulado)}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {formatedDate(invoice.dueDate)}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.invoiceStatus}
+                </td>
+                <td className="border border-slate-500 px-4 text-base ">
+                  {invoice.observations}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+         <div className=" ml-4 mr-8 mt-4 p-6 rounded-xl text-2xl text-white text-center shadow-lg  grid grid-cols-2">
         <div className="mr-2 gap-2 bg-cyan-700 rounded-xl">
           <h1>Total facturas Pagadas</h1>
           <h1 className="text-2xl text-white text-center ">
             {formatCurrency(totalPaidByProjectFamilySubfamily)}
           </h1>
         </div>
-        <div  className="mr-2 gap-2 bg-cyan-700 rounded-xl">
+        <div className="mr-2 gap-2 bg-cyan-700 rounded-xl">
           <h1>% Pagado</h1>
-{percentagePaid}
-
+          {percentagePaid}
         </div>
-      </div>
+      </div>       </div>
     </div>
   );
 };

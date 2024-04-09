@@ -95,10 +95,7 @@ const ViewerProvider = ({ children }) => {
     setProjects(newDataProject);
   };
 
-  const updateSelectedProjectId = (newSelectedProjectId) => {
-    setSelectedProjectId(newSelectedProjectId);
-  };
-
+  
   const updatefilterType = (newFilterType) => {
     setFilterType(newFilterType);
   };
@@ -156,6 +153,17 @@ const ViewerProvider = ({ children }) => {
       currency: "CLP",
       minimumFractionDigits: 0,
     });
+  };
+  const formatedDate = (isoDate) => {
+    if (!isoDate) return "Fecha no disponible";
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1; // getUTCMonth() devuelve un índice basado en cero (0-11)
+    const year = date.getUTCFullYear();
+    // Formatea el día y el mes para asegurar que tengan dos dígitos
+    const formattedDay = String(day).padStart(2, "0");
+    const formattedMonth = String(month).padStart(2, "0");
+    return `${formattedDay}/${formattedMonth}/${year}`;
   };
 
   const openEditForm = (sheet) => {
@@ -232,7 +240,7 @@ const ViewerProvider = ({ children }) => {
         setSelectedProject,
         selectedProjectId,
         setSelectedProjectId,
-        updateSelectedProjectId,
+        formatedDate,
         filterType,
         setFilterType,
         updatefilterType,

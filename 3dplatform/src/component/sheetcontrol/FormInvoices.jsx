@@ -33,14 +33,9 @@ const FormInvoices = () => {
     setSubcontractorsOffers,
     setDescription,
     setInvoicesData,
-    
   } = useContext(ViewerContext);
-    console.log("🚀 ~ FormInvoices ~ curentIdInvoices:", curentIdInvoices);
-
   // const closeModelInvoices = () => setIsModalOpenBudget(false);
   const [forceUpdate, setForceUpdate] = useState(0);
-  console.log("🚀 ~ FormInvoices ~ forceUpdate:", forceUpdate);
-
   const forceReRender = () => {
     setForceUpdate((prev) => prev + 1); // Si estás usando un contador
   };
@@ -85,7 +80,7 @@ const FormInvoices = () => {
         setInvoicesData((prevData) => [...prevData, invoice]);
         // No es necesario cambiar isEditMode aquí, ya que se asume que ya está en false para operaciones POST
       }
-    resetForm()
+      resetForm();
     } catch (err) {
       console.error("Error submitting invoice:", err);
     }
@@ -109,11 +104,11 @@ const FormInvoices = () => {
   const closeModalInvoices = () => {
     setIsModalOpenBudget(false);
     setIsEditMode(false); // Restablece isEditMode a false aquí
-    resetForm();forceReRender()
+    resetForm();
+    forceReRender();
     // Asume que esta función restablece el resto del formulario
   };
- 
-  
+
   return (
     <div className=" ">
       <Modal className="" isOpen={isModalOpenBudget}>
@@ -202,31 +197,13 @@ const FormInvoices = () => {
                 </option>
                 <option value="Pintura">Pintura</option>
                 <option value="puertas_cerraduras">puertas_cerraduras</option>
-                <option
-                  value="Socalzado
-                  ">
-                  Socalzado
+                <option value="Subcontrato_Socalzado">
+                  Subcontrato_Socalzado
                 </option>
-                <option
-                  value="Tabiqueria
-                  ">
-                  Tabiqueria
-                </option>
-                <option
-                  value="Terminaciones
-                  ">
-                  Terminaciones
-                </option>
-                <option
-                  value="Subcontrato_Fierro
-                  ">
-                  Subcontrato_Fierro
-                </option>
-                <option
-                  value="Ventanas
-                  ">
-                  Ventanas
-                </option>
+                <option value="Tabiqueria">Tabiqueria</option>
+                <option value="Terminaciones">Terminaciones</option>
+                <option value="Subcontrato_Fierro">Subcontrato_Fierro</option>
+                <option value="Ventanas">Ventanas</option>
               </select>
             </div>
             <div className="">
@@ -271,9 +248,10 @@ const FormInvoices = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
+
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
-                  Valor Neto Factura
+                  Neto Factura
                 </label>
                 <input
                   className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"

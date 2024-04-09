@@ -7,13 +7,11 @@ const ProjectInformation = () => {
     setSelectedProject,
     selectedProject,
     selectedProjectId,
-    setSelectedProjectId: updateSelectedProjectId,
+    setSelectedProjectId,
     setIsMoldalOpen,
-    filteredProjectId,
     totalBudget,
     getDataSheet,
   } = useContext(ViewerContext);
-
   const openModal = () => setIsMoldalOpen(true);
 
   useEffect(() => {
@@ -28,7 +26,6 @@ const ProjectInformation = () => {
 
     return passesProjectId;
   });
-
   // filtro del costo Actual
   const filteredDataSheet = getDataSheet.filter((item) => {
     const passesProjectId =
@@ -112,7 +109,7 @@ const ProjectInformation = () => {
               <select
                 className="bg-blue-500 p-2 ml-2 rounded-lg text-white text-lg"
                 value={selectedProjectId}
-                onChange={(e) => updateSelectedProjectId(e.target.value)}>
+                onChange={(e) => setSelectedProjectId(e.target.value)}>
                 <option value="">Select a Project</option>
                 {projects.map((project) => (
                   <option key={project._id} value={project.projectId}>
@@ -163,7 +160,7 @@ const ProjectInformation = () => {
         </div>
         <div className="grid grid-cols-4 ">
           <div className="  flex justify-center mt-4 mb-4 ">
-            {filteredProjectId && filteredDataProject && (
+            { filteredDataProject && (
               <div className="   text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl ">
                 <div className="text-xl mt-8 text-white ">Presupuesto: </div>
                 <div className="text-3xl text-white mt-4">

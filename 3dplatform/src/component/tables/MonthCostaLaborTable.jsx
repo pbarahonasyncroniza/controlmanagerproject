@@ -20,132 +20,133 @@ import {
 } from "recharts";
 
 import { useTheme } from "@table-library/react-table-library/theme";
+import Exceltransform from "../Exceltransform";
 
 const MonthCostaLaborTable = () => {
-  const { dataNode, projects } = useContext(ViewerContext);
-
+  const { dataNode, projects, formatCurrency } = useContext(ViewerContext);
   const [totalsWithAccumulated, setTotalsWithAccumulated] = useState([]);
-
   const [monthlyCosts, setMonthlyCosts] = useState([]);
-
-  // filtrar mano de obra y agrupar por mes
+  const [selectedByProjectId, setSelectedByProjectId] = useState("");
+  const [combinedData, setCombinedData] = useState("");
+  // filtra la mano de obra proyectada por mes
   useEffect(() => {
-    const allSheets = projects.flatMap((project) => project.sheets);
+    let filteredSheets = projects
+      .flatMap((project) => project.sheets)
+      .filter(
+        (sheet) =>
+          sheet.family === "Mano_Obra" &&
+          (!selectedByProjectId || sheet.projectId === selectedByProjectId)
+      );
 
-    const manoobraData = allSheets.filter(
-      (sheet) => sheet.family === "Mano_Obra"
+    const manoobraData = filteredSheets.sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
     );
-
-    manoobraData.sort((a, b) => new Date(a.date) - new Date(b.date));
-    const groupedByMonth = {};
-
-    manoobraData?.forEach((sheet) => {
-      const date = new Date(sheet.date);
-      const monthYear = `${date.getMonth() + 1}-${date.getFullYear()}`;
-
-      if (!groupedByMonth[monthYear]) {
-        groupedByMonth[monthYear] = {
+    const groupedByMonth = manoobraData.reduce((acc, sheet) => {
+      const monthYear = `${new Date(sheet.date).getMonth() + 1}-${new Date(
+        sheet.date
+      ).getFullYear()}`;
+      if (!acc[monthYear]) {
+        acc[monthYear] = {
           realCost: 0,
-          plannedCost: 0, // Aquí debes calcular el costo planificado para el mes
+          plannedCost: 0,
+          accumulatedReal: 0,
         };
       }
+      acc[monthYear].realCost += sheet.total;
+      return acc;
+    }, {});
 
-      groupedByMonth[monthYear].realCost += sheet.total;
-    });
-
+    // Reinicia acumuladoReal para cada proyecto
     let acumuladoReal = 0;
-    const monthlyData = Object.keys(groupedByMonth).map((monthYear) => {
-      const [month, year] = monthYear.split("-");
-      const formattedMonthYear = `${month.padStart(2, "0")}-${year}`;
+    const monthlyData = Object.entries(groupedByMonth).map(
+      ([monthYear, data]) => {
+        acumuladoReal += data.realCost;
+        return {
+          monthYear,
+          realCost: data.realCost,
+          plannedCost: data.plannedCost, // Asume este valor ya está calculado o agregado
+          accumulatedReal: acumuladoReal,
+        };
+      }
+    );
 
-      acumuladoReal += groupedByMonth[monthYear].realCost;
-
-      return {
-        monthYear: formattedMonthYear,
-        realCost: groupedByMonth[monthYear].realCost,
-        plannedCost: groupedByMonth[monthYear].plannedCost,
-        accumulatedReal: acumuladoReal,
-      };
-    });
     setMonthlyCosts(monthlyData);
-  }, [projects]);
+  }, [projects, selectedByProjectId]);
 
-  // filtra la mano de obra proyectada por mes
+  // Filtra los acumulados por proyecto separadamente
 
   useEffect(() => {
-    const groupedByMonth = {};
-
-    dataNode.nodes.forEach((item) => {
-      // Verifica que deadline exista y no sea null o undefined
-      if (item.deadline) {
-        const date = new Date(item.deadline);
-        const month = (date.getMonth() + 1).toString().padStart(2, "0"); // getMonth() es 0-indexado
-        const year = date.getFullYear();
-        const monthYear = `${month}-${year}`;
-        const projectId = item.projectId;
-
-        if (!groupedByMonth[monthYear]) {
-          groupedByMonth[monthYear] = { items: [], projectId };
-        }
-
-        groupedByMonth[monthYear].items.push(item);
+    // Agrupar dataNode.nodes por projectId
+    const groupedByProject = dataNode.nodes.reduce((acc, item) => {
+      const { projectId } = item;
+      if (!acc[projectId]) {
+        acc[projectId] = [];
       }
-    });
-    const totalsByMonth = Object.keys(groupedByMonth).map((monthYear) => {
-      const { items, projectId } = groupedByMonth[monthYear];
+      acc[projectId].push(item);
+      return acc;
+    }, {});
 
-      const totalLabor = items.reduce((sum, item) => {
-        const value = Number(item.total || 0);
-        return sum + value;
-      }, 0);
+    // Aquí, cada 'items' es un arreglo de nodos para un projectId específico
+    const totalsByProject = Object.entries(groupedByProject)
+      .map(([projectId, items]) => {
+        // Ahora agrupa y calcula por monthYear dentro de cada proyecto
+        const groupedByMonth = items.reduce((acc, item) => {
+          const monthYear = `${
+            new Date(item.deadline).getMonth() + 1
+          }-${new Date(item.deadline).getFullYear()}`;
+          if (!acc[monthYear]) {
+            acc[monthYear] = { totalLabor: 0, items: [] };
+          }
+          acc[monthYear].totalLabor += Number(item.total || 0);
+          acc[monthYear].items.push(item);
+          return acc;
+        }, {});
+        // Ordenar las entradas de groupedByMonth por fecha (monthYear)
+        const sortedEntries = Object.entries(groupedByMonth).sort((a, b) => {
+          const dateA = new Date(a[0].split("-")[1], a[0].split("-")[0] - 1); // Convierte 'monthYear' a Date
+          const dateB = new Date(b[0].split("-")[1], b[0].split("-")[0] - 1);
+          return dateA - dateB;
+        });
+        // Calcula acumulados para cada proyecto de manera independiente
+        let accumulated = 0;
+        return sortedEntries.map(([period, data]) => {
+          accumulated += data.totalLabor;
+          return {
+            period,
+            totalLabor: data.totalLabor,
+            projectId,
+            accumulated,
+          };
+        });
+      })
+      .flat(); // Aplanar el arreglo resultante para no tener un arreglo de arreglos
+
+    setTotalsWithAccumulated(totalsByProject);
+  }, [dataNode, selectedByProjectId]);
+
+  //combinacion de Data para que el grafico muestre el correspondiente projectId
+  useEffect(() => {
+    const filteredTotalsWithAccumulated = totalsWithAccumulated.filter(
+      (item) => item.projectId === selectedByProjectId
+    );
+
+    const newCombinedData = filteredTotalsWithAccumulated.map((twaItem) => {
+      const monthlyCostItem = monthlyCosts.find(
+        (mcItem) => mcItem.monthYear === twaItem.period
+      );
       return {
-        period: monthYear,
-        totalLabor,
-        projectId,
+        month: twaItem.period,
+        projectedAccumulated: twaItem.accumulated,
+        realAccumulated: monthlyCostItem ? monthlyCostItem.accumulatedReal : 0,
       };
     });
 
-    totalsByMonth.sort((a, b) => {
-      const [monthA, yearA] = a.period.split("-").map(Number);
-      const [monthB, yearB] = b.period.split("-").map(Number);
-      return new Date(yearA, monthA - 1) - new Date(yearB, monthB - 1);
-    });
+    setCombinedData(newCombinedData);
+  }, [totalsWithAccumulated, monthlyCosts, selectedByProjectId]);
 
-    // calculo de acumulados
-    let acumulados = 0;
-    const totalsWithAccumulated = totalsByMonth.map((item) => {
-      acumulados += item.totalLabor;
-      return {
-        ...item,
-        accumulated: acumulados,
-      };
-    });
+  // generar lsita con Ids unicos para filtrado por projectId
+  const projectIds = projects.map((project) => project.projectId);
 
-    setTotalsWithAccumulated(totalsWithAccumulated);
-  }, [dataNode]);
-  const combinedData = [];
-
-  // Asumiendo que 'dataNode' y 'projects' ya están procesados en tus estados como 'totalsWithAccumulated' y 'monthlyCosts' respectivamente
-
-  totalsWithAccumulated.forEach((item) => {
-    const monthlyCost = monthlyCosts.find((cost) => {
-      return cost.monthYear === item.period;
-    });
-
-    combinedData.push({
-      month: item.period,
-      projectedAccumulated: item.accumulated, // o la propiedad correspondiente de 'dataNode'
-      realAccumulated: monthlyCost ? monthlyCost.accumulatedReal : 0, // o un valor por defecto si no hay datos
-    });
-  });
-
-  const formatCurrency = (value) => {
-    return Number(value).toLocaleString("es-Cl", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-    });
-  };
   const theme = useTheme({
     HeaderRow: `
         background-color: #eaf5fd;
@@ -168,21 +169,40 @@ const MonthCostaLaborTable = () => {
           <h1>Control Mano de Obra (Proyectado vs Real)</h1>
           <h1>Proyecto Pedro Torres</h1>
         </div>
-        {/* <div className="bg-white mt-2 p-6 rounded-xl grid grid-cols-4">
+        <div>
           <div>
-            <h1 className="text-lg bg-cyan-700 p-6 rounded-xl mr-2">Disponible</h1>
+            {/* <h1 className="text-lg bg-cyan-700 p-6 rounded-xl mr-2">
+              Disponible
+            </h1> */}
           </div>
           <div>
-            <h1 className="text-lg bg-cyan-700 p-6 rounded-xl">Gastado a la Fecha</h1>
+            {/* <h1 className="text-lg bg-cyan-700 p-6 rounded-xl">
+              Gastado a la Fecha
+            </h1> */}
           </div>
           <div>
-            <h1 className="text-lg bg-cyan-700 p-6 rounded-xl ml-2">Por Gastar</h1>
+            {/* <h1 className="text-lg bg-cyan-700 p-6 rounded-xl ml-2">
+              Por Gastar
+            </h1> */}
           </div>
           <div>
-            <h1 className="text-lg bg-cyan-700 p-6 rounded-xl ml-2">% Gastado</h1>
+            {/* <h1 className="text-lg bg-cyan-700 p-6 rounded-xl ml-2">
+              % Gastado
+            </h1> */}
           </div>
-        </div> */}
-
+        </div>
+        <select
+          className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
+          value={selectedByProjectId}
+          onChange={(e) => setSelectedByProjectId(e.target.value)}>
+          <option value="">Selecciona un Proyecto</option>
+          {projectIds.map((id) => (
+            <option key={id} value={id}>
+              {id}
+            </option>
+          ))}
+        </select>
+        <Exceltransform UrlEndpoint="http://localhost:8000/labor/" />
         <div className="mt-4 ml-4"></div>
         <Table
           data={dataNode}
@@ -206,31 +226,33 @@ const MonthCostaLaborTable = () => {
                 </HeaderRow>
               </Header>
               <Body>
-                {totalsWithAccumulated.map((total, y) => {
-                  const monthlyCost = monthlyCosts.find(
-                    (cost) => cost.monthYear === total.period
-                  );
+                {totalsWithAccumulated
+                  .filter((total) => total.projectId === selectedByProjectId)
+                  .map((total, y) => {
+                    const monthlyCost = monthlyCosts.find(
+                      (cost) => cost.monthYear === total.period
+                    );
 
-                  return (
-                    <Row key={y}>
-                      <Cell className="text-xl">{total.projectId}</Cell>
-                      <Cell className="text-xl">{y + 1}</Cell>
-                      <Cell>{total.period}</Cell>
-                      <Cell>{formatCurrency(total.totalLabor)}</Cell>
-                      <Cell>{formatCurrency(total.accumulated)}</Cell>
-                      <Cell>
-                        {monthlyCost
-                          ? formatCurrency(monthlyCost.realCost)
-                          : "No disponible"}
-                      </Cell>
-                      <Cell>
-                        {monthlyCost
-                          ? formatCurrency(monthlyCost.accumulatedReal)
-                          : "No disponible"}
-                      </Cell>
-                    </Row>
-                  );
-                })}
+                    return (
+                      <Row key={y}>
+                        <Cell className="text-xl">{total.projectId}</Cell>
+                        <Cell className="text-xl">{y + 1}</Cell>
+                        <Cell>{total.period}</Cell>
+                        <Cell>{formatCurrency(total.totalLabor)}</Cell>
+                        <Cell>{formatCurrency(total.accumulated)}</Cell>
+                        <Cell>
+                          {monthlyCost
+                            ? formatCurrency(monthlyCost.realCost)
+                            : "No disponible"}
+                        </Cell>
+                        <Cell>
+                          {monthlyCost
+                            ? formatCurrency(monthlyCost.accumulatedReal)
+                            : "No disponible"}
+                        </Cell>
+                      </Row>
+                    );
+                  })}
               </Body>
             </>
           )}

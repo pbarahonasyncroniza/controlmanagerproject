@@ -3,6 +3,7 @@ import { ViewerContext } from "../Context";
 import axios from "axios";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { v4 as uuidv4 } from "uuid";
+
 import {
   Table,
   Header,
@@ -20,10 +21,12 @@ const IncreasesAndDiscounts = () => {
     setDataIncreaseDiscount,
     formatCurrency,
     selectedProjectId,
+    setIsModalOpenBudget,
   } = useContext(ViewerContext);
   const [editingRows, setEditingRows] = useState("");
   const [editFormData, setEditFormData] = useState({});
   const [editingId, setEditingId] = useState(null);
+  const openModal = () => setIsModalOpenBudget(true);
 
   const handleUpdate = (value, id, property) => {
     setDataIncreaseDiscount((state) => ({
@@ -177,8 +180,31 @@ const IncreasesAndDiscounts = () => {
   });
 
   return (
-    <div>
-      <div className="flex">
+    <div className="bg-white p-3 ml-3 mt-3 rounded-xl">
+      <h1 className="text-xl font-semibold ">AUMENTOS Y DESCUENTOS</h1>
+      <div className="flex ">
+        <button
+          onClick={openModal}
+          className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            dataslot="icon"
+            className="w-4 h-4">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>{" "}
+          Nuevo Registro
+        </button>
+      </div>
+    
+      <div className="flex rounded-xl shadow-xl mr-2">
         <button className="flex mb-2 gap-2" onClick={handleAddRow}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

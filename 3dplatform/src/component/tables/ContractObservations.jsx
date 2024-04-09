@@ -3,6 +3,7 @@ import { ViewerContext } from "../Context";
 import axios from "axios";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { v4 as uuidv4 } from "uuid";
+import FormContractObservation from "../sheetcontrol/FormContractObservation";
 
 import {
   Table,
@@ -21,8 +22,11 @@ const ContractObservations = () => {
     setData,
     formatCurrency,
     selectedProjectId,
+    setIsModalOpenBudget,
   } = useContext(ViewerContext);
   const [editingRow, setEditingRow] = useState(null);
+
+  const openModal = () => setIsModalOpenBudget(true);
 
   const handleUpdate = (value, id, property) => {
     setData((state) => ({
@@ -82,7 +86,7 @@ const ContractObservations = () => {
   };
 
   const handleSubmitContractObservation = async () => {
-    const senddatacontract = await axios.post(
+    await axios.post(
       "http://localhost:8000/contract/",
 
       data.nodes
@@ -113,7 +117,7 @@ const ContractObservations = () => {
     };
 
     fetchContract();
-  }, [selectedSubfamily,selectedProjectId]);
+  }, [selectedSubfamily, selectedProjectId, setData]);
 
   const theme = useTheme({
     HeaderRow: `
@@ -131,8 +135,30 @@ const ContractObservations = () => {
   });
 
   return (
-    <div>
+    <div className="bg-white mt-3 ml-3 p-3 rounded-xl">
+      <FormContractObservation />
       <div className="flex">
+        <button
+          onClick={openModal}
+          className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            dataslot="icon"
+            className="w-4 h-4">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>{" "}
+          Nuevo Registro
+        </button>
+        <h1 className="text-xl font-semibold ">OBSERVACIONES AL CONTRATO</h1>
+        <div className="mt-3 ml-4  grid grid-cols-2 "></div>
         <button className="flex mb-2 gap-2" onClick={handleAddRow}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

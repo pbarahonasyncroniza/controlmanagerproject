@@ -39,4 +39,4 @@ const LaborCostSchema = new mongoose.Schema(
   }
 );
 
-export const LaborCostModel = mongoose.model("laborcostcontrol", LaborCostSchema);
+export const LaborCostModel = mongoose.model("laborcost", LaborCostSchema);

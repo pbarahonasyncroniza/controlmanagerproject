@@ -9,10 +9,11 @@ const LaborCostControl = () => {
         <Sidebardb />
         <MonthCostaLaborTable />
         {/* MOnthCostlaborTable depende Costlaborcontroltable ya que tiene el post y get si se borra no renderiza MonthscostLabor ... channn */}
-        <CostLaborControlTable />
+        <CostLaborControlTable /> 
       </div>
     </div>
   );
 };
 
 export default LaborCostControl;
+               
