@@ -61,7 +61,9 @@ const ViewerProvider = ({ children }) => {
   ] = useState(0);
 
   const [dataIncreaseDiscount, setDataIncreaseDiscount] = useState([]);
-
+  const [currentIdIncreaseDiscount, setCurrentIdIncreaseDiscount] =
+    useState("");
+  const [isModalOpenContract, setIsModalOpenContract] = useState("");
   const [filters, setFilters] = useState({
     projectId: "",
     cod: "",
@@ -339,6 +341,10 @@ const ViewerProvider = ({ children }) => {
         setCurrentIdContract,
         totalPaidByProjectFamilySubfamily,
         setTotalPaidByProjectFamilySubfamily,
+        currentIdIncreaseDiscount,
+        setCurrentIdIncreaseDiscount,
+        isModalOpenContract,
+        setIsModalOpenContract,
       }}>
       {children}
     </ViewerContext.Provider>

@@ -13,10 +13,10 @@ const FormContractObservation = () => {
     setSubfamily,
     setDescription,
     description,
-    isModalOpenBudget,
+    isModalOpenContract,
     isEditMode,
     setIsEditMode,
-    setIsModalOpenBudget,
+    setIsModalOpenContract,
     glosa,
     setGlosa,
     proyectado,
@@ -51,7 +51,7 @@ const FormContractObservation = () => {
           contractObservationData
         );
       }
-      closeModelBudget();
+      closeModelContrat();
     } catch (err) {
       console.error("Error submit Observation Contract", err);
     }
@@ -74,8 +74,8 @@ const FormContractObservation = () => {
     setProyectado("");
   };
 
-  const closeModelBudget = () => {
-    setIsModalOpenBudget(false);
+  const closeModelContrat = () => {
+    setIsModalOpenContract(false);
     if (isEditMode) {
       resetForm();
       setIsEditMode(false);
@@ -84,7 +84,7 @@ const FormContractObservation = () => {
 
   return (
     <div>
-      <Modal isOpen={isModalOpenBudget}>
+      <Modal isOpen={isModalOpenContract}>
         <h1 className="text-2xl font-blod mb-2 text-white">
           {isEditMode ? "Modo Editar" : "Modo Crear"}
         </h1>
@@ -94,76 +94,94 @@ const FormContractObservation = () => {
               <div>
                 <label className="text-lg text-white font-bolt mb-2 ">
                   ProjectId
+                  <select
+                    className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                    placeholder="ProjectId"
+                    type="text"
+                    name="projectId"
+                    value={projectId}
+                    onChange={(e) => setProjectId(e.target.value)}>
+                    <option value="PT-101">PT-101</option>
+                    <option value="TR-222">TR-222</option>
+                  </select>
                 </label>
-
-                <input
-                  className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                  placeholder="ProjectId"
-                  type="text"
-                  value={projectId}
-                  onChange={(e) => setProjectId(e.target.value)}
-                />
               </div>
               <div>
                 <label className="text-lg text-white font-bolt mb-2 ">
                   family
+                  <select
+                    className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                    placeholder="familia"
+                    name="family"
+                    type="text"
+                    value={family}
+                    onChange={(e) => setFamily(e.target.value)}>
+                    <option value="Elegir Familia">Elegir Familia</option>
+                    <option value="Subcontrato">Subcontrato</option>
+                    <option value="Material">Material</option>
+                    <option value="Arriendos">Arriendos</option>
+                    <option value="Mano_Obra">Mano_Obra</option>
+                    <option value="Otros">Otros</option>
+                    <option value="GG">GG</option>
+                  </select>
                 </label>
-                <select
-                  className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                  placeholder="familia"
-                  type="text"
-                  value={family}
-                  onChange={(e) => setFamily(e.target.value)}>
-                  <option value="Elegir Familia">Elegir Familia</option>
-                  <option value="Subcontrato">Subcontrato</option>
-                  <option value="Material">Material</option>
-                  <option value="Arriendos">Arriendos</option>
-                  <option value="Mano_Obra">Mano_Obra</option>
-                  <option value="Otros">Otros</option>
-                  <option value="GG">GG</option>
-                </select>
               </div>
             </div>
 
             <label className="text-lg text-white font-bolt mb-2 ">
               subfamily
+              <select
+                className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="subfamilia"
+                type="text"
+                name="subfamily"
+                value={subfamily}
+                onChange={(e) => setSubfamily(e.target.value)}>
+                {" "}
+                <option value="Elegir Familia">Elegir SubFamilia</option>
+                <option value="Arriendo_Moldaje">Arriendo_Moldaje</option>
+                <option value="Fierro">Fierro</option>
+                <option value="Hormigones">Hormigones</option>
+                <option value="Mano_Obra">Mano_Obra</option>
+                <option value="Subcontrato_Tabiqueria">
+                  Subcontrato_Tabiqueria
+                </option>
+                <option value="GG">GG</option>
+              </select>
             </label>
-            <input
-              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="subfamilia"
-              type="text"
-              value={subfamily}
-              onChange={(e) => setSubfamily(e.target.value)}
-            />
+
             <label className="text-lg text-white font-bolt mb-2 ">glosa</label>
             <input
               className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
               placeholder="glosa"
               type="text"
+              name="glosa"
               value={glosa}
               onChange={(e) => setGlosa(e.target.value)}
             />
 
             <label className="text-lg text-white font-bolt mb-2 ">
               descripcion
+              <input
+                className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="description"
+                name="description"
+                type="text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </label>
-            <input
-              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="description"
-              type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <label className="text-lg text-white font-bolt mb-2 ">
-              proyectado
-            </label>
+              <label className="text-lg text-white font-bolt mb-2 ">
+                proyectado
             <input
               className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
               placeholder="proyectado"
               type="text"
+              name="proyectado"
               value={proyectado}
               onChange={(e) => setProyectado(e.target.value)}
-            />
+              />
+              </label>
             <div className="flex justify-between">
               <button
                 className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2"
@@ -171,7 +189,7 @@ const FormContractObservation = () => {
                 Submit Tasks
               </button>
               <button
-                onClick={closeModelBudget}
+                onClick={closeModelContrat}
                 className="bg-red-500 rounded-xl text-white font-semibold p-3 mt-2  mb-2">
                 Close Form
               </button>

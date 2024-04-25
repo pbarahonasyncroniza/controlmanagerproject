@@ -79,6 +79,7 @@ const MaterialSheetsControl = () => {
           <h1 className="mt-5">Elegir Proyecto</h1>
           <select
             className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
+            name="newProjectId"
             value={selectedProjectId} // Cambia esto para usar selectedProjectId
             onChange={(e) => {
               const newProjectId = e.target.value;
@@ -98,6 +99,7 @@ const MaterialSheetsControl = () => {
             <h1 className="mt-5">Elegir Hoja de Control</h1>
             <select
               className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
+              name="selectedSubfamily"
               value={selectedSubfamily}
               onChange={(e) => setSelectedSubfamily(e.target.value)}>
               <option className="" value="Elegir Hoja de Control">

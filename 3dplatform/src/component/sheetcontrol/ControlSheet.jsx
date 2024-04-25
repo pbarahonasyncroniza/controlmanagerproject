@@ -31,7 +31,7 @@ const ControlSheet = () => {
     <div className="">
       <div className="">
         <div className=""></div>
-        <Modal isOpen={isModalOpen} >
+        <Modal isOpen={isModalOpen}>
           <form onSubmit={handleUpdateProject}>
             <div className="   ">
               <h1 className="text-white text-xl">Crear Nuevo Projecto</h1>
@@ -39,33 +39,32 @@ const ControlSheet = () => {
                 <div className="">
                   <label className="text-lg font-semibolt ml-4 ">
                     ProjectId
+                    <input
+                      className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
+                      placeholder="ProjectId"
+                      type="text"
+                      name="projectId"
+                      value={projectId}
+                      onChange={(e) => setProjectId(e.target.value)}
+                    />
                   </label>
-                  <input
-                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
-                    placeholder="ProjectId"
-                    type="text"
-                    name="projectId"
-                    value={projectId}
-                    onChange={(e) => setProjectId(e.target.value)}
-                  />
                 </div>
                 <div className="">
                   <label className="text-xl font-semibolt ml-4 ">
                     Project Name
+                    <input
+                      className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
+                      placeholder="Project name"
+                      type="text"
+                      name="projectname"
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                    />
                   </label>
-                  <input
-                    className="mt-1 border border-solid bg-blue-500 rounded-xl p-2 mb-2 flex  mr-2 ml-2 text-white"
-                    placeholder="Project name"
-                    type="text"
-                    name="projectname"
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                  />
                 </div>
                 <div>
                   <label className="text-xl font-semibolt mr-4 ml-4">
                     Start Date
-                  </label>
                   <input
                     className="mt-1 border border-solid bg-blue-500 text-white rounded-xl p-2 mb-2 flex  ml-2"
                     placeholder="Project name"
@@ -73,12 +72,12 @@ const ControlSheet = () => {
                     name="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                  />
+                    />
+                    </label>
 
                   <div>
                     <label className="text-xl font-semibolt mr-4 ml-4">
                       End Date
-                    </label>
                     <input
                       className="mt-1 border border-solid bg-blue-500 text-white rounded-xl p-2 mb-2 flex  ml-2"
                       placeholder="End name"
@@ -86,15 +85,16 @@ const ControlSheet = () => {
                       name="date"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
-                    />
+                      />
+                      </label>
                   </div>
                 </div>
               </div>
             </div>
             <div className="flex justify-between">
-              <button 
-              className="bg-green-500 rounded-lg text-white p-1 mt-2  mb-2"
-              type="submit">
+              <button
+                className="bg-green-500 rounded-lg text-white p-1 mt-2  mb-2"
+                type="submit">
                 Submit Tasks
               </button>
               <button

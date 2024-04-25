@@ -2,7 +2,6 @@ import Sidebardb from "../component/dashboard/Sidebardb";
 import MaterialSheetsControl from "../component/tables/MaterialSheetsControl";
 import IdentificationHeader from "../component/tables/IdentificationHeader";
 import CarsInformationSheets from "../component/tables/CarsInformationSheets";
-import IncreasesAndDiscounts from "../component/tables/IncreasesAndDiscounts";
 import Invoices from "../component/tables/Invoices";
 import PurchaseOrderTable from "../component/tables/PurchaseOrderTable";
 import ContractObservationByForm from "../component/tables/ContractObservationByForm";
@@ -16,8 +15,7 @@ const HojadeControl = () => {
         <MaterialSheetsControl />
         <IdentificationHeader />
         <CarsInformationSheets />
-        <div className="flex">
-          {/* <ContractObservations /> */}
+        <div className="grid grid-cols-2">
           <ContractObservationByForm />
           <IncreaseAndDiscountByForm />
         </div>
@@ -29,5 +27,3 @@ const HojadeControl = () => {
 };
 
 export default HojadeControl;
-
-

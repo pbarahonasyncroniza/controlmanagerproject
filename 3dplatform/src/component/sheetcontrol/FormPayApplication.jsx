@@ -75,7 +75,7 @@ const FormPayApplication = () => {
     };
 
     descuentoAnticipo();
-  }, [anticipo, porcentajedsctoAnticipo, payapplication]); 
+  }, [anticipo, porcentajedsctoAnticipo, payapplication]);
 
   // calculo descuento Retenciones
   useEffect(() => {
@@ -99,7 +99,6 @@ const FormPayApplication = () => {
   useEffect(() => {
     const calculoFinalFactura = () => {
       const calculoEEPP = payapplication;
-
 
       const calculodescuentos = dsctoAnticipo + retenciones;
       const calculoFacturaFinal = calculoEEPP - calculodescuentos;
@@ -128,80 +127,80 @@ const FormPayApplication = () => {
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
                   ProjectId
+                  <input
+                    className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  "
+                    placeholder="ProjectId"
+                    type="text"
+                    name="ProjectId"
+                    value={projectId}
+                    onChange={(e) => setProjectId(e.target.value)}
+                  />
                 </label>
-                <input
-                  className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  "
-                  placeholder="ProjectId"
-                  type="text"
-                  name="ProjectId"
-                  value={projectId}
-                  onChange={(e) => setProjectId(e.target.value)}
-                />
               </div>
               <div className="flex gap-2 ">
                 <div className="">
                   <label className="text-lg text-white font-bolt mb-2  ">
                     Familia
+                    <select
+                      className="text-lg  font-bolt   bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                      name="family"
+                      value={family}
+                      onChange={(e) => setFamily(e.target.value)}>
+                      <option value="Subcontrato">Subcontrato</option>
+                    </select>
                   </label>
-                  <select
-                    className="text-lg  font-bolt   bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                    name="family"
-                    value={family}
-                    onChange={(e) => setFamily(e.target.value)}>
-                    <option value="Subcontrato">Subcontrato</option>
-                  </select>
                 </div>
                 <div className="">
                   <label className="text-lg text-white font-bolt mb-2 ">
                     Subcontrato
+                    <select
+                      className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                      type="text"
+                      name="SubcontractorOffers "
+                      value={subfamily}
+                      onChange={(e) => setSubfamily(e.target.value)}>
+                      <option value="">Selecionar una Subcontrato</option>
+                      <option value="Subcontrato_Fierro">
+                        Subcontrato_Fierro
+                      </option>
+                      <option value="Subcontrato_Socalzado">
+                        Subcontrato_Socalzado
+                      </option>
+                      <option value="Subcontrato_Instalacion_Moldaje">
+                        Subcontrato_Instalacion_Moldaje
+                      </option>
+                      <option value="Subcontrato_Instalacion_Tabiques">
+                        Subcontrato_Instalacion_Tabiques
+                      </option>
+                      <option value="Subcontrato_Fierro">
+                        Subcontrato_Instalaciones_Electricas
+                      </option>
+                      <option value="Subcontrato_Movimiento_Tierra">
+                        Subcontrato_Movimiento_Tierra
+                      </option>
+                      <option value="Subcontrato_Muebles">
+                        Subcontrato_Muebles
+                      </option>
+                      <option value="Subcontrato_Papel_mural_revestimiento">
+                        Subcontrato_Papel_mural_revestimiento
+                      </option>
+                      <option value="Subcontrato_Pavimentos_Ceramicas">
+                        Subcontrato_Pavimentos_Ceramicas
+                      </option>
+                      <option value="Subcontrato_Techumbre">
+                        Subcontrato_Techumbre
+                      </option>
+                      <option value="Subcontrato_Terminaciones">
+                        Subcontrato_Terminaciones
+                      </option>
+                      <option value="Subcontrato_Ventanas">
+                        Subcontrato_Ventanas
+                      </option>
+                      <option value="Subcontrato_puertas_cerraduras">
+                        Subcontrato_puertas_cerraduras
+                      </option>
+                    </select>
                   </label>
-                  <select
-                    className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-                    type="text"
-                    name="SubcontractorOffers "
-                    value={subfamily}
-                    onChange={(e) => setSubfamily(e.target.value)}>
-                    <option value="">Selecionar una Subcontrato</option>
-                    <option value="Subcontrato_Fierro">
-                      Subcontrato_Fierro
-                    </option>
-                    <option value="Subcontrato_Socalzado">
-                      Subcontrato_Socalzado
-                    </option>
-                    <option value="Subcontrato_Instalacion_Moldaje">
-                      Subcontrato_Instalacion_Moldaje
-                    </option>
-                    <option value="Subcontrato_Instalacion_Tabiques">
-                      Subcontrato_Instalacion_Tabiques
-                    </option>
-                    <option value="Subcontrato_Fierro">
-                      Subcontrato_Instalaciones_Electricas
-                    </option>
-                    <option value="Subcontrato_Movimiento_Tierra">
-                      Subcontrato_Movimiento_Tierra
-                    </option>
-                    <option value="Subcontrato_Muebles">
-                      Subcontrato_Muebles
-                    </option>
-                    <option value="Subcontrato_Papel_mural_revestimiento">
-                      Subcontrato_Papel_mural_revestimiento
-                    </option>
-                    <option value="Subcontrato_Pavimentos_Ceramicas">
-                      Subcontrato_Pavimentos_Ceramicas
-                    </option>
-                    <option value="Subcontrato_Techumbre">
-                      Subcontrato_Techumbre
-                    </option>
-                    <option value="Subcontrato_Terminaciones">
-                      Subcontrato_Terminaciones
-                    </option>
-                    <option value="Subcontrato_Ventanas">
-                      Subcontrato_Ventanas
-                    </option>
-                    <option value="Subcontrato_puertas_cerraduras">
-                      Subcontrato_puertas_cerraduras
-                    </option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -209,175 +208,181 @@ const FormPayApplication = () => {
           <div className="">
             <label className="text-lg text-white font-bolt mb-2 ">
               Nombre Subcontrato
+              <input
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                placeholder="subcontrato"
+                type="text"
+                name="SubcontractorOffers "
+                value={subcontractorOffers}
+                onChange={(e) => setSubcontractorsOffers(e.target.value)}
+              />
             </label>
-            <input
-              className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-              placeholder="subcontrato"
-              type="text"
-              name="SubcontractorOffers "
-              value={subcontractorOffers}
-              onChange={(e) => setSubcontractorsOffers(e.target.value)}
-            />
           </div>
 
           <div className="">
             <label className="text-lg text-white font-bolt mb-2  ">
               Monto Anticipo
+              <input
+                className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="Monto Anticipo"
+                type="number"
+                name="type"
+                value={anticipo}
+                onChange={(e) => setAnticipo(e.target.value || "")}
+              />
             </label>
-            <input
-              className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="Monto Anticipo"
-              type="number"
-              name="type"
-              value={anticipo}
-              onChange={(e) => setAnticipo(e.target.value || "")}
-            />
           </div>
 
           <div className="flex justify-between">
             <div className="">
               <label className="text-lg text-white font-bolt mb-2  ">
                 Fecha
+                <input
+                  className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                  placeholder="Fecha"
+                  type="date"
+                  name="type"
+                  value={datePayApplication}
+                  onChange={(e) => setDatePayApplication(e.target.value)}
+                />
               </label>
-              <input
-                className="  bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                placeholder="Fecha"
-                type="date"
-                name="type"
-                value={datePayApplication}
-                onChange={(e) => setDatePayApplication(e.target.value)}
-              />
             </div>
             <div className="ml-2">
               <label className="text-lg text-white font-bolt mb-2 ">
                 N° Factura
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                  placeholder="factura"
+                  type="text"
+                  name="invoice"
+                  value={invoices}
+                  onChange={(e) => setInvoices(e.target.value || "")}
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-                placeholder="factura"
-                type="text"
-                name="invoice"
-                value={invoices}
-                onChange={(e) => setInvoices(e.target.value || "")}
-              />
             </div>
             <div className="ml-2">
               <label className="text-lg text-white font-bolt mb-2 ">
                 Estado de Pago Numero
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                  placeholder="Description"
+                  type="text"
+                  name="description"
+                  value={numberpayapplication}
+                  onChange={(e) =>
+                    setNumberPayApplication(e.target.value || "")
+                  }
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-                placeholder="Description"
-                type="text"
-                name="description"
-                value={numberpayapplication}
-                onChange={(e) => setNumberPayApplication(e.target.value || "")}
-              />
             </div>
           </div>
 
           <div className="">
             <label className="text-lg text-white font-bolt mb-2 ">
               Monto EEPP
+              <input
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                placeholder="Monto EEPP"
+                type="number"
+                name="payapplicationqty"
+                value={payapplication}
+                onChange={(e) => setPayApplication(e.target.value || "")}
+              />
             </label>
-            <input
-              className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-              placeholder="Monto EEPP"
-              type="number"
-              name="payapplicationqty"
-              value={payapplication}
-              onChange={(e) => setPayApplication(e.target.value || "")}
-            />
           </div>
           <div className="flex justify-between">
             <div>
-              <label className="text-lg text-white font-bolt mb-2">%</label>
-              <select
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
-                placeholder="Anticipo"
-                type="number"
-                name="unit"
-                value={porcentajedsctoAnticipo}
-                onChange={(e) =>
-                  setPorcentajedsctoAnticipo(e.target.value || "")
-                }>
-                <option value="0%">0%</option>
-                <option value="5%">5%</option>
-                <option value="10%">10%</option>
-                <option value="15%">15%</option>
-              </select>
+              <label className="text-lg text-white font-bolt mb-2">
+                %
+                <select
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
+                  placeholder="Anticipo"
+                  type="number"
+                  name="unit"
+                  value={porcentajedsctoAnticipo}
+                  onChange={(e) =>
+                    setPorcentajedsctoAnticipo(e.target.value || "")
+                  }>
+                  <option value="0%">0%</option>
+                  <option value="5%">5%</option>
+                  <option value="10%">10%</option>
+                  <option value="15%">15%</option>
+                </select>
+              </label>
             </div>
             <div>
               <label className="text-lg text-white font-bolt mb-2 ">
                 dcto Anticipo
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
+                  placeholder="Anticipo"
+                  type="number"
+                  name="unit"
+                  value={dsctoAnticipo}
+                  onChange={(e) => setDctoAnticipo(e.target.value || "")}
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
-                placeholder="Anticipo"
-                type="number"
-                name="unit"
-                value={dsctoAnticipo}
-                onChange={(e) => setDctoAnticipo(e.target.value || "")}
-              />
             </div>
 
             <div>
-              <label className="text-lg text-white font-bolt mb-2 ">%</label>
-              <select
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
-                placeholder="retenciones"
-                type="number"
-                name="unit"
-                value={porcentajeDctoRetenciones}
-                onChange={(e) =>
-                  setPorcentajeDctoRetenciones(e.target.value || "")
-                }>
-                <option value="0%">0%</option>
-                <option value="5%">5%</option>
-                <option value="10%">10%</option>
-                <option value="15%">15%</option>
-              </select>
+              <label className="text-lg text-white font-bolt mb-2 ">
+                %
+                <select
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
+                  placeholder="retenciones"
+                  type="number"
+                  name="unit"
+                  value={porcentajeDctoRetenciones}
+                  onChange={(e) =>
+                    setPorcentajeDctoRetenciones(e.target.value || "")
+                  }>
+                  <option value="0%">0%</option>
+                  <option value="5%">5%</option>
+                  <option value="10%">10%</option>
+                  <option value="15%">15%</option>
+                </select>
+              </label>
             </div>
             <div>
               <label className="text-lg text-white font-bolt mb-2 ">
                 Retenciones
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
+                  placeholder="retenciones"
+                  type="number"
+                  name="unit"
+                  value={retenciones}
+                  onChange={(e) => setRetenciones(e.target.value || "")}
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full "
-                placeholder="retenciones"
-                type="number"
-                name="unit"
-                value={retenciones}
-                onChange={(e) => setRetenciones(e.target.value || "")}
-              />
             </div>
           </div>
 
           <div className="">
             <label className="text-lg text-white font-bolt mb-2 ">
               Neto Factura
+              <input
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2  text-white border-solid border-4 border-gray-500 p-2"
+                placeholder="Neto Factura"
+                type="number"
+                name="unitprice "
+                value={totalInvoices}
+                onChange={(e) => setTotalInvoices(e.target.value || "")}
+              />
             </label>
-            <input
-              className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2  text-white border-solid border-4 border-gray-500 p-2"
-              placeholder="Neto Factura"
-              type="number"
-              name="unitprice "
-              value={totalInvoices}
-              onChange={(e) => setTotalInvoices(e.target.value || "")}
-            />
           </div>
           <div className="">
             <label className="text-lg text-white font-bolt mb-2 ">
               Observacion
+              <input
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2  text-white border-solid border-4 border-gray-500 p-2"
+                placeholder="Observacion"
+                type="text"
+                name="observation"
+                value={observations}
+                onChange={(e) => setObservations(e.target.value)}
+              />
             </label>
-            <input
-              className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2  text-white border-solid border-4 border-gray-500 p-2"
-              placeholder="Observacion"
-              type="text"
-              name="observation"
-              value={observations}
-              onChange={(e) => setObservations(e.target.value)}
-            />
           </div>
 
           <div className="flex justify-between">

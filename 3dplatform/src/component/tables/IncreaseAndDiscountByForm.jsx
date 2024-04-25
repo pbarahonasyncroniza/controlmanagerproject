@@ -16,6 +16,7 @@ const IncreaseAndDiscountByForm = () => {
     setIsEditMode,
     setDescription,
     setCurrentIdIncreaseDiscount,
+    currentIdIncreaseDiscount,
     formatCurrency,
     dataIncreaseDiscount,
     setDataIncreaseDiscount,
@@ -62,16 +63,17 @@ const IncreaseAndDiscountByForm = () => {
   }, [selectedSubfamily, selectedProjectId, setData]);
 
   //---------------------------- Delete----------------------------//
-  const handleDeleContractObservations = async (increasediscountid) => {
+  const handleDeleIncreaseAndDiscount = async (increasediscountId) => {
+    console.log("🚀 ~ handleDeleIncreaseAndDiscount ~ increasediscountId:", increasediscountId);
     const isConfirmed = window.confirm(
-      "Esta seguro que quiere borrar la factura ?"
+      "Esta seguro que quiere borrar el Registro ?"
     );
     if (!isConfirmed) {
       return;
     }
     try {
       const response = await axios.delete(
-        `http://localhost:8000/contract/${increasediscountid}`
+        `http://localhost:8000/increasediscount/${increasediscountId}`
       );
 
       if (response.status === 200) {
@@ -79,7 +81,7 @@ const IncreaseAndDiscountByForm = () => {
           // Filtrar el array para remover el elemento eliminado
           return prevContractData.filter(
             (increasediscount) =>
-              increasediscount._id.toString() !== increasediscountid.toString()
+              increasediscount._id.toString() !== increasediscountId.toString()
           );
         });
       }
@@ -89,11 +91,12 @@ const IncreaseAndDiscountByForm = () => {
   };
 
   //--------------------- Update Form ----------------------//
-  const openFormAndCurrentContractId = (increasediscountid) => {
+  const openFormAndCurrentIncreaseDiscountId = (increasediscountid) => {
     // Encuentra el contract específica por su ID
-    const increasediscountToEdit = data.find(
+    const increasediscountToEdit = dataIncreaseDiscount.find(
       (increasediscount) => increasediscount._id === increasediscountid
     );
+    console.log("🚀 ~ openFormAndCurrentIncreaseDiscountId ~ dataIncreaseDiscount:", dataIncreaseDiscount);
 
     if (increasediscountToEdit) {
       // setEditingContract(contractToEdit);
@@ -109,7 +112,7 @@ const IncreaseAndDiscountByForm = () => {
   return (
     <div className="bg-white mt-3 ml-3 p-3 rounded-xl">
       <FormIncreaseAndDiscount />
-      <h1 className="text-xl font-semibold ml-3 ">OBSERVACIONES AL CONTRATO</h1>
+      <h1 className="text-xl font-semibold ml-3 ">AUMENTO / DISMINUCIONES AL CONTRATO</h1>
       <button
         onClick={openModal}
         className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
@@ -191,7 +194,7 @@ const IncreaseAndDiscountByForm = () => {
                     <button
                       className=" bg-red-500  p-1 text-white rounded-lg text-sm "
                       onClick={() =>
-                        handleDeleContractObservations(increasediscount._id)
+                        handleDeleIncreaseAndDiscount(increasediscount._id)
                       }>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -212,7 +215,7 @@ const IncreaseAndDiscountByForm = () => {
                     <button
                       className="bg-green-500 p-1 text-white rounded-lg text-sm"
                       onClick={() =>
-                        openFormAndCurrentContractId(increasediscount._id)
+                        openFormAndCurrentIncreaseDiscountId(increasediscount._id)
                       }>
                       {/* Icono de edición */}
                       <svg

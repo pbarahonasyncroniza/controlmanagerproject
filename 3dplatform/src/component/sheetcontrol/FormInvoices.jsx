@@ -136,20 +136,20 @@ const FormInvoices = () => {
             <div className="">
               <label className="text-lg text-white font-bolt mb-2  ">
                 Familia
+                <select
+                  className="text-lg  font-bolt   bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                  name="family"
+                  value={family}
+                  onChange={(e) => setFamily(e.target.value)}>
+                  <option value="">Selecionar una Familia</option>
+                  <option value="Subcontrato">Subcontrato</option>
+                  <option value="Material">Material</option>
+                  <option value="Arriendos">Arriendos</option>
+                  <option value="Mano_Obra">Mano_Obra</option>
+                  <option value="Otros">Otros</option>
+                  <option value="GG">GG</option>
+                </select>
               </label>
-              <select
-                className="text-lg  font-bolt   bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                name="family"
-                value={family}
-                onChange={(e) => setFamily(e.target.value)}>
-                <option value="">Selecionar una Familia</option>
-                <option value="Subcontrato">Subcontrato</option>
-                <option value="Material">Material</option>
-                <option value="Arriendos">Arriendos</option>
-                <option value="Mano_Obra">Mano_Obra</option>
-                <option value="Otros">Otros</option>
-                <option value="GG">GG</option>
-              </select>
             </div>
             <div className="">
               <select
@@ -209,115 +209,115 @@ const FormInvoices = () => {
             <div className="">
               <label className="text-lg text-white font-bolt mb-2 ">
                 N° Factura
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                  placeholder="factura"
+                  type="text"
+                  name="invoice"
+                  value={invoices}
+                  onChange={(e) => setInvoices(e.target.value)}
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex  mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-                placeholder="factura"
-                type="text"
-                name="invoice"
-                value={invoices}
-                onChange={(e) => setInvoices(e.target.value)}
-              />
             </div>
           </div>
           <div>
             <label className="text-lg text-white font-bolt mb-2 ">
               Proveedor
+              <input
+                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
+                placeholder="Proveedor"
+                type="text"
+                name="subcontractorOffers"
+                value={subcontractorOffers}
+                onChange={(e) => setSubcontractorsOffers(e.target.value)}
+              />
             </label>
-            <input
-              className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500 w-full"
-              placeholder="Proveedor"
-              type="text"
-              name="subcontractorOffers"
-              value={subcontractorOffers}
-              onChange={(e) => setSubcontractorsOffers(e.target.value)}
-            />
           </div>
           <div className="">
             <div className="flex">
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
                   Glosa
+                  <input
+                    className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                    placeholder="Glosa"
+                    type="text"
+                    name="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
                 </label>
-                <input
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                  placeholder="Glosa"
-                  type="text"
-                  name="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
               </div>
 
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
                   Neto Factura
+                  <input
+                    className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                    placeholder="Neto Factura"
+                    type="number"
+                    name="totalInvoices"
+                    value={totalInvoices}
+                    onChange={(e) => setTotalInvoices(e.target.value)}
+                  />
                 </label>
-                <input
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                  placeholder="Neto Factura"
-                  type="number"
-                  name="totalInvoices"
-                  value={totalInvoices}
-                  onChange={(e) => setTotalInvoices(e.target.value)}
-                />
               </div>
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
                   Fecha emision
+                  <input
+                    className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                    placeholder="Fecha emision"
+                    type="date"
+                    name="dataInvoices"
+                    value={dateInvoices}
+                    onChange={(e) => setDateInvoices(e.target.value)}
+                  />
                 </label>
-                <input
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                  placeholder="Fecha emision"
-                  type="date"
-                  name="dataInvoices"
-                  value={dateInvoices}
-                  onChange={(e) => setDateInvoices(e.target.value)}
-                />
               </div>
               <div className="">
                 <label className="text-lg text-white font-bolt mb-2 ">
                   Fecha Pago
+                  <input
+                    className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                    placeholder="Neto Factura"
+                    type="date"
+                    name="invoiceStatus"
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
+                  />
                 </label>
-                <input
-                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                  placeholder="Neto Factura"
-                  type="date"
-                  name="invoiceStatus"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                />
               </div>
             </div>
 
             <div className="">
               <label className="text-lg text-white font-bolt mb-2 ">
                 estado factura
+                <select
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
+                  placeholder="Neto Factura"
+                  type="checkbox"
+                  name="invoiceStatus"
+                  value={invoiceStatus}
+                  onChange={(e) => setInvoiceStatus(e.target.value)}>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Pagado">Pagado</option>
+                </select>
               </label>
-              <select
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500  w-full"
-                placeholder="Neto Factura"
-                type="checkbox"
-                name="invoiceStatus"
-                value={invoiceStatus}
-                onChange={(e) => setInvoiceStatus(e.target.value)}>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Pagado">Pagado</option>
-              </select>
             </div>
 
             <div className="">
               <label className="text-lg text-white font-bolt mb-2 ">
                 Observaciones
+                <input
+                  className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                  placeholder="Observaciones"
+                  type="text"
+                  name="observations"
+                  value={observations}
+                  onChange={(e) => setObservations(e.target.value)}
+                />
               </label>
-              <input
-                className=" bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-                placeholder="Observaciones"
-                type="text"
-                name="observations"
-                value={observations}
-                onChange={(e) => setObservations(e.target.value)}
-              />
             </div>
           </div>
 

@@ -167,7 +167,6 @@ const MonthCostaLaborTable = () => {
       <div className="p-4">
         <div className="bg-white text-xl font-semibold rounded-xl text-center">
           <h1>Control Mano de Obra (Proyectado vs Real)</h1>
-          <h1>Proyecto Pedro Torres</h1>
         </div>
         <div>
           <div>
@@ -194,6 +193,7 @@ const MonthCostaLaborTable = () => {
         <select
           className="ml-4 bg-blue-500 p-2 rounded-lg text-white mt-4 mb-2 shadow-xl"
           value={selectedByProjectId}
+          name="selectedByProjectId"
           onChange={(e) => setSelectedByProjectId(e.target.value)}>
           <option value="">Selecciona un Proyecto</option>
           {projectIds.map((id) => (

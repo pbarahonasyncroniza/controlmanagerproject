@@ -26,9 +26,9 @@ const ProjectData = () => {
     setIsEditMode(false);
   };
 
-  const comparateDates = (date1, date2)=>{
-    return new Date(date1)-new Date(date2)
-  }
+  const comparateDates = (date1, date2) => {
+    return new Date(date1) - new Date(date2);
+  };
 
   useEffect(() => {
     // Función para obtener proyectos junto con las sheets .. sheets viene anodado en projects
@@ -69,7 +69,6 @@ const ProjectData = () => {
 
           // Filtrar el array sheets para remover el elemento eliminado
           updatedProject.sheets = updatedProject?.sheets?.filter(
-            
             (sheet) => sheet._id !== sheetid
           );
 
@@ -102,7 +101,7 @@ const ProjectData = () => {
       // Concatenar las sheets de cada proyecto al arreglo allSheets
       allSheets = allSheets.concat(project.sheets);
     });
-    allSheets.sort((a,b)=> comparateDates(a.date,b.date))
+    allSheets.sort((a, b) => comparateDates(a.date, b.date));
     // Aquí suponemos que tienes un estado para almacenar todas las sheets recopiladas
     setAllSheets(allSheets); // Asegúrate de tener un estado llamado allSheets definido para esto
   }, [projects]); // Este efecto se ejecutará cada vez que el arreglo de proyectos cambie
@@ -120,14 +119,13 @@ const ProjectData = () => {
             <div>
               <label className="text-xs p-1" htmlFor="filterType">
                 Filter Type
+                <input
+                  placeholder=" Filter by Family"
+                  id="filterType"
+                  type="text"
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}></input>
               </label>
-              <input
-                placeholder=" Filter by Family"
-                className=""
-                type="text"
-                value={filterType}
-                name="filter"
-                onChange={(e) => setFilterType(e.target.value)}></input>
             </div>
           </div>
           <div className="">
