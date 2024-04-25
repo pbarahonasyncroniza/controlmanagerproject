@@ -24,6 +24,7 @@ const ContractObservations = () => {
     selectedProjectId,
     setIsModalOpenBudget,
   } = useContext(ViewerContext);
+  
   const [editingRow, setEditingRow] = useState(null);
 
   const openModal = () => setIsModalOpenBudget(true);

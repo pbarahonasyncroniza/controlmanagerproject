@@ -9,12 +9,17 @@ const Invoices = () => {
     selectedProjectId,
     formatCurrency,
     selectedFamily,
-  } = useContext(ViewerContext);
-  const [newfilteredInvoices, setNewFilteredInvoices] = useState([]);
-  const [
     totalPaidByProjectFamilySubfamily,
     setTotalPaidByProjectFamilySubfamily,
-  ] = useState(0);
+    accumatedValue,
+  } = useContext(ViewerContext);
+  console.log("🚀 ~ Invoices ~ invoicesdata:", invoicesdata);
+  const [newfilteredInvoices, setNewFilteredInvoices] = useState([]);
+
+  console.log(
+    "🚀 ~ Invoices ~ totalPaidByProjectFamilySubfamily:",
+    totalPaidByProjectFamilySubfamily
+  );
   const [percentagePaid, setPercentagePaid] = useState([]);
 
   const formatedDate = (isoDate) => {
@@ -63,7 +68,9 @@ const Invoices = () => {
     );
 
     const percentagePaid =
-      totalInvoiced > 0 ? Number (((totalPaid / totalInvoiced) * 100).toFixed(2)) : 0;
+      totalInvoiced > 0
+        ? Number(((totalPaid / totalInvoiced) * 100).toFixed(2))
+        : 0;
     setPercentagePaid(percentagePaid);
 
     setTotalPaidByProjectFamilySubfamily(totalPaid);
@@ -83,7 +90,7 @@ const Invoices = () => {
 
   return (
     <div className="bg-white mt-3 mb-3 p-2 rounded-xl ml-3 ">
-        <h1 className="text-xl font-semibold ">FACTURAS</h1> 
+      <h1 className="text-xl font-semibold ml-3 ">FACTURAS</h1>
       <div className="grid grid-cols-[3fr_1fr] overflow-y-visible">
         <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">
           <thead className="sticky top-0 bg-cyan-700 text-white -z-3">
@@ -170,18 +177,19 @@ const Invoices = () => {
             ))}
           </tbody>
         </table>
-         <div className=" ml-4 mr-8 mt-4 p-6 rounded-xl text-2xl text-white text-center shadow-lg  grid grid-cols-2">
-        <div className="mr-2 gap-2 bg-cyan-700 rounded-xl">
-          <h1>Total facturas Pagadas</h1>
-          <h1 className="text-2xl text-white text-center ">
-            {formatCurrency(totalPaidByProjectFamilySubfamily)}
-          </h1>
+        <div className=" ml-4 mr-8 mt-4 p-6 rounded-xl text-xl text-white text-center shadow-lg  grid grid-cols-2 ">
+          <div className=" flex flex-col justify-center mr-2 gap-2 bg-cyan-700 rounded-xl font-light">
+            <h1>TOTAL FACTURADO</h1>
+            <h1 className="text-3xl text-white text-center font-semibold  ">
+              {formatCurrency(accumatedValue)}
+            </h1>
+          </div>
+          <div className="flex flex-col justify-center font-light mr-2 gap-2 bg-cyan-700 rounded-xl ml-1">
+            <h1>% PAGADO DE LO FACTURADO</h1>
+            <h1 className="text-3xl font-semibold ">{percentagePaid}%</h1>
+          </div>
         </div>
-        <div className="mr-2 gap-2 bg-cyan-700 rounded-xl">
-          <h1>% Pagado</h1>
-          {percentagePaid}
-        </div>
-      </div>       </div>
+      </div>
     </div>
   );
 };

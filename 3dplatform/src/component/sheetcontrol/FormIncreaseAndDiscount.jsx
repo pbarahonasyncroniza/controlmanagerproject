@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "../Modal";
 import axios from "axios";
 import { ViewerContext } from "../Context";
 
-const FormContractObservation = () => {
+function FormIncreaseAndDiscount() {
   const {
     projectId,
     setProjectId,
@@ -11,44 +11,37 @@ const FormContractObservation = () => {
     setFamily,
     subfamily,
     setSubfamily,
-    setDescription,
-    description,
     isModalOpenBudget,
     isEditMode,
-    setIsEditMode,
     setIsModalOpenBudget,
-    glosa,
-    setGlosa,
-    proyectado,
-    setProyectado,
-    data,
-    currentContractId,
+    setIsEditMode,
   } = useContext(ViewerContext);
-  console.log("🚀 ~ FormContractObservation ~ data:", data);
+  const [detalle,setDetalle]=useState("")
+  const [aumentodisminucion,setAumentoDisminucion]=useState("")
+  const [real,setReal]=useState("")
+  const [recuperable,setRecuperable]=useState("")
+  const [observaciones,setObservaciones]=useState("")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const contractObservationData = {
+    const increaseAndDiscountData = {
       projectId: projectId || undefined,
       family: family || undefined,
       subfamily: subfamily || undefined,
-      Descripcion: description || undefined,
-      Proyectado: proyectado || undefined,
-      Glosa: glosa || undefined,
     };
 
     try {
       if (isEditMode) {
         resetForm();
         await axios.patch(
-          `http://localhost:8000/contract/${currentContractId}`,
-          contractObservationData
+          `http://localhost:8000/contract/${increasediscountId}`,
+          increaseAndDiscountData
         );
       } else {
         await axios.post(
-          "http://localhost:8000/contract",
-          contractObservationData
+          "http://localhost:8000/increasediscount",
+          increaseAndDiscountData
         );
       }
       closeModelBudget();
@@ -56,22 +49,10 @@ const FormContractObservation = () => {
       console.error("Error submit Observation Contract", err);
     }
   };
-
-  useEffect(() => {
-    if (isEditMode) {
-      setGlosa(data.Glosa || "");
-      setDescription(data.Descripcion || "");
-      setProyectado(data.Proyectado || "");
-    }
-  }, [isEditMode, data]);
-
   const resetForm = () => {
     setProjectId("");
     setFamily("");
     setSubfamily("");
-    setDescription("");
-    setGlosa("");
-    setProyectado("");
   };
 
   const closeModelBudget = () => {
@@ -135,34 +116,54 @@ const FormContractObservation = () => {
               value={subfamily}
               onChange={(e) => setSubfamily(e.target.value)}
             />
-            <label className="text-lg text-white font-bolt mb-2 ">glosa</label>
+            <label className="text-lg text-white font-bolt mb-2 ">
+              Detalle
+            </label>
             <input
               className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="glosa"
+              placeholder="detalle"
               type="text"
-              value={glosa}
-              onChange={(e) => setGlosa(e.target.value)}
+              value={detalle}
+              onChange={(e) => setDetalle(e.target.value)}
             />
 
             <label className="text-lg text-white font-bolt mb-2 ">
-              descripcion
+              Aumento/Disminucion
             </label>
             <input
               className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
               placeholder="description"
               type="text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={aumentodisminucion}
+              onChange={(e) => setAumentoDisminucion(e.target.value)}
+            />
+            <label className="text-lg text-white font-bolt mb-2 ">Real</label>
+            <input
+              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+              placeholder="proyectado"
+              type="text"
+              value={real}
+              onChange={(e) => setReal(e.target.value)}
             />
             <label className="text-lg text-white font-bolt mb-2 ">
-              proyectado
+              Recuperable
             </label>
             <input
               className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
               placeholder="proyectado"
               type="text"
-              value={proyectado}
-              onChange={(e) => setProyectado(e.target.value)}
+              value={recuperable}
+              onChange={(e) => setRecuperable(e.target.value)}
+            />
+            <label className="text-lg text-white font-bolt mb-2 ">
+              Observaciones
+            </label>
+            <input
+              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+              placeholder="proyectado"
+              type="text"
+              value={observaciones}
+              onChange={(e) => setObservaciones(e.target.value)}
             />
             <div className="flex justify-between">
               <button
@@ -181,6 +182,6 @@ const FormContractObservation = () => {
       </Modal>
     </div>
   );
-};
+}
 
-export default FormContractObservation;
+export default FormIncreaseAndDiscount;

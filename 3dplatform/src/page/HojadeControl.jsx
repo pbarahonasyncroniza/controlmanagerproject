@@ -2,10 +2,11 @@ import Sidebardb from "../component/dashboard/Sidebardb";
 import MaterialSheetsControl from "../component/tables/MaterialSheetsControl";
 import IdentificationHeader from "../component/tables/IdentificationHeader";
 import CarsInformationSheets from "../component/tables/CarsInformationSheets";
-import ContractObservations from "../component/tables/ContractObservations";
 import IncreasesAndDiscounts from "../component/tables/IncreasesAndDiscounts";
 import Invoices from "../component/tables/Invoices";
 import PurchaseOrderTable from "../component/tables/PurchaseOrderTable";
+import ContractObservationByForm from "../component/tables/ContractObservationByForm";
+import IncreaseAndDiscountByForm from "../component/tables/IncreaseAndDiscountByForm";
 
 const HojadeControl = () => {
   return (
@@ -16,8 +17,9 @@ const HojadeControl = () => {
         <IdentificationHeader />
         <CarsInformationSheets />
         <div className="flex">
-          <ContractObservations />
-          <IncreasesAndDiscounts />
+          {/* <ContractObservations /> */}
+          <ContractObservationByForm />
+          <IncreaseAndDiscountByForm />
         </div>
         <Invoices />
         <PurchaseOrderTable />

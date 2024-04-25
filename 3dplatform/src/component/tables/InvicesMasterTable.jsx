@@ -32,8 +32,9 @@ const InvicesMasterTable = () => {
   useEffect(() => {
     fetchInvoices();
   }, [selectedSubfamily, isModalOpenBudget, setInvoicesData]); // Se ejecuta solo e
-
+  //--------------------Delete____________________________
   const handleDeleteInvoice = async (invoicesid) => {
+    console.log("🚀 ~ handleDeleteInvoice ~ invoicesid:", invoicesid);
     const isConfirmed = window.confirm(
       "Esta seguro que quiere borrar la factura ?"
     );
@@ -44,7 +45,7 @@ const InvicesMasterTable = () => {
       const response = await axios.delete(
         `http://localhost:8000/invoices/${invoicesid}`
       );
-      console.log("🚀 ~ handleDeleteInvoice ~ invoicesid:", invoicesid);
+
       if (response.status === 200) {
         setInvoicesData((prevInvoiceData) => {
           // Filtrar el array para remover el elemento eliminado
@@ -105,7 +106,6 @@ const InvicesMasterTable = () => {
             </svg>{" "}
             Nuevo Registro
           </button>
-      
         </div>
 
         <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2 mr-2  ">

@@ -26,7 +26,4 @@ const ContractSchema = new mongoose.Schema(
   }
 );
 
-export const ContractModel = mongoose.model(
-  "Contract",
-  ContractSchema
-);
+export const ContractModel = mongoose.model("Contract", ContractSchema);

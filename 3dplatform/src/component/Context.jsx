@@ -23,7 +23,7 @@ const ViewerProvider = ({ children }) => {
   const [selectedSubfamily, setSelectedSubfamily] = useState(
     "Elegir Hoja de Control"
   );
-  const [data, setData] = useState({ nodes: [] });
+  const [data, setData] = useState([]);
   const [acumuladoTotal, setAcumuladoTotal] = useState(0);
   const [selectedFamily, setSelectedFamily] = useState("");
   const [materialSheets, setMaterialSheets] = useState([]);
@@ -52,10 +52,15 @@ const ViewerProvider = ({ children }) => {
   const [dueDate, setDueDate] = useState("");
   const [observations, setObservations] = useState("");
   const [totalBySubFamily, setTotalBySubFamily] = useState({});
+  const [proyectado, setProyectado] = useState("");
+  const [glosa, setGlosa] = useState("");
+  const [currentContractId, setCurrentIdContract] = useState("");
+  const [
+    totalPaidByProjectFamilySubfamily,
+    setTotalPaidByProjectFamilySubfamily,
+  ] = useState(0);
 
-  const [dataIncreaseDiscount, setDataIncreaseDiscount] = useState({
-    nodes: [],
-  });
+  const [dataIncreaseDiscount, setDataIncreaseDiscount] = useState([]);
 
   const [filters, setFilters] = useState({
     projectId: "",
@@ -95,7 +100,6 @@ const ViewerProvider = ({ children }) => {
     setProjects(newDataProject);
   };
 
-  
   const updatefilterType = (newFilterType) => {
     setFilterType(newFilterType);
   };
@@ -144,7 +148,6 @@ const ViewerProvider = ({ children }) => {
 
   const handleInvoiceSelect = (invoiceId) => {
     setCurentIdInvoices(invoiceId);
-    // Además, aquí podrías abrir el modal de edición o realizar otras acciones necesarias
   };
 
   const formatCurrency = (value) => {
@@ -193,24 +196,18 @@ const ViewerProvider = ({ children }) => {
     );
 
     if (invoiceToEdit) {
-      console.log(
-        "🚀 ~ openFormAndCurrentInvloiceId ~ invoiceToEdit:",
-        invoiceToEdit
-      );
-
       setProjectId(invoiceToEdit.projectId);
       setFamily(invoiceToEdit.family);
       setSubfamily(invoiceToEdit.subfamily);
       setInvoices(invoiceToEdit.invoices);
       setDateInvoices(invoiceToEdit.dateInvoices);
       setTotalInvoices(invoiceToEdit.totalInvoices);
-      setSubcontractorsOffers(invoiceToEdit.subcontractorOffers)
+      setSubcontractorsOffers(invoiceToEdit.subcontractorOffers);
       setDescription(invoiceToEdit.description);
       setDueDate(formatDateForInput(invoiceToEdit.dueDate));
       setObservations(invoiceToEdit.observations);
       setInvoiceStatus(invoiceToEdit.invoiceStatus);
       setDateInvoices(formatDateForInput(invoiceToEdit.dateInvoices));
-
       setIsEditMode(true); // Indica que el formulario se abre en modo edición
       setCurentIdInvoices(invoiceToEdit._id); // Guarda la ID actual de la factura que se está editando
       setIsModalOpenBudget(true); // Abre el modal del formulario
@@ -334,6 +331,14 @@ const ViewerProvider = ({ children }) => {
         formatCurrency,
         totalBySubFamily,
         setTotalBySubFamily,
+        glosa,
+        setGlosa,
+        proyectado,
+        setProyectado,
+        currentContractId,
+        setCurrentIdContract,
+        totalPaidByProjectFamilySubfamily,
+        setTotalPaidByProjectFamilySubfamily,
       }}>
       {children}
     </ViewerContext.Provider>

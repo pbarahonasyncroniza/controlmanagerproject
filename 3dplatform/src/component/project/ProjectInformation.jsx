@@ -159,17 +159,17 @@ const ProjectInformation = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 ">
-          <div className="  flex justify-center mt-4 mb-4 ">
+          <div className="  flex justify-center  ">
             { filteredDataProject && (
-              <div className="   text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl ">
-                <div className="text-xl mt-8 text-white ">Presupuesto: </div>
+              <div className="  text-center bg-blue-500 px-10  rounded-xl shadow-xl mt-4 mb-4 mr-3">
+                <div className="text-xl mt-14 text-white ">Presupuesto: </div>
                 <div className="text-3xl text-white mt-4">
                   {formatCurrency(budgetAvailableProject())}
                 </div>
               </div>
             )}
           </div>
-          <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-3">
+          <div className=" text-center bg-blue-500 px-10  rounded-xl shadow-xl mt-4 mb-4 mr-3">
             <h1 className="text-xl mt-14 text-white">
               Gastado a la Fecha (OC) :
             </h1>
@@ -177,13 +177,13 @@ const ProjectInformation = () => {
               {formatCurrency(actualCostSheet())}
             </div>
           </div>
-          <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-3 ">
+          <div className=" text-center bg-blue-500 px-10  rounded-xl shadow-xl mt-4 mb-4 mr-3 ">
             <h1 className=" text-xl mt-14 text-white">Disponible:</h1>
             <div className="text-3xl text-white mt-4">
               {formatCurrency(differentBudget)}
             </div>
           </div>
-          <div className=" text-center bg-blue-500 px-10 py-2 rounded-xl shadow-xl mt-4 mb-4 mr-4 ">
+          <div className=" text-center bg-blue-500 px-10  rounded-xl shadow-xl mt-4 mb-4 mr-4 ">
             <h1 className=" text-xl mt-14 text-white">% Gastado:</h1>
             <div className="text-3xl text-white mt-4 ">
               {formattedProgressBudget(progressBudget)}

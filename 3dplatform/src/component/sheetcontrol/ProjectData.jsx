@@ -20,11 +20,15 @@ const ProjectData = () => {
     formatedDate,
   } = useContext(ViewerContext);
 
-  const [sllSheets, setAllSheets] = useState([]);
+  const [allSheets, setAllSheets] = useState([]);
   const openModal = () => {
     setIsModalOpenBudget(true);
     setIsEditMode(false);
   };
+
+  const comparateDates = (date1, date2)=>{
+    return new Date(date1)-new Date(date2)
+  }
 
   useEffect(() => {
     // Función para obtener proyectos junto con las sheets .. sheets viene anodado en projects
@@ -49,6 +53,7 @@ const ProjectData = () => {
   }, [setProjects, isModalOpenBudget]);
 
   const handleDeleteOC = async (sheetid) => {
+    console.log("🚀 ~ handleDeleteOC ~ sheetid:", sheetid);
     const isConfirmed = window.confirm("¿Está seguro de que quiere borrar?");
 
     if (!isConfirmed) {
@@ -63,7 +68,8 @@ const ProjectData = () => {
           const updatedProject = { ...prevSelectedProject };
 
           // Filtrar el array sheets para remover el elemento eliminado
-          updatedProject.sheets = updatedProject.sheets.filter(
+          updatedProject.sheets = updatedProject?.sheets?.filter(
+            
             (sheet) => sheet._id !== sheetid
           );
 
@@ -96,7 +102,7 @@ const ProjectData = () => {
       // Concatenar las sheets de cada proyecto al arreglo allSheets
       allSheets = allSheets.concat(project.sheets);
     });
-
+    allSheets.sort((a,b)=> comparateDates(a.date,b.date))
     // Aquí suponemos que tienes un estado para almacenar todas las sheets recopiladas
     setAllSheets(allSheets); // Asegúrate de tener un estado llamado allSheets definido para esto
   }, [projects]); // Este efecto se ejecutará cada vez que el arreglo de proyectos cambie
@@ -193,7 +199,7 @@ const ProjectData = () => {
               </tr>
             </thead>
             <tbody>
-              {sllSheets.map((item, z) => (
+              {allSheets.map((item, z) => (
                 <tr key={z}>
                   <td className="border border-slate-500 px-4 text-base ">
                     {item.projectId}
