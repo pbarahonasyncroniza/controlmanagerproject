@@ -18,31 +18,31 @@ const Kpis = () => {
         Key Performance Indicator (KPI)
       </div>
       <div className="mt-2">
-      <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
-        <h2 >(SV)</h2>
-        <h2>EV-PV</h2>
-        <h2>0.95</h2>
-      </div>
-      <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
-        <h2 >(CV)</h2>
-        <h2>EV-AC</h2>
-        <h2>0.95</h2>
-      </div>
-      <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
-        <h2 >(SPI)</h2>
-        <h2>EV/PV</h2>
-        <h2>0.95</h2>
-      </div>
-      <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
-        <h2 >(CPI)</h2>
-        <h2>EV/AC</h2> 
-        <h2>0.95</h2>
-      </div>
-      <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
-        <h2 >(SV)</h2>
-        <h2>PV-EV</h2>
-        <h2>0.95</h2>
-      </div>
+        <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
+          <h2>(SV)</h2>
+          <h2>EV-PV</h2>
+          <h2>0.95</h2>
+        </div>
+        <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
+          <h2>(CV)</h2>
+          <h2>EV-AC</h2>
+          <h2>0.95</h2>
+        </div>
+        <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
+          <h2>(SPI)</h2>
+          <h2>EV/PV</h2>
+          <h2>0.95</h2>
+        </div>
+        <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
+          <h2>(CPI)</h2>
+          <h2>EV/AC</h2>
+          <h2>0.95</h2>
+        </div>
+        <div className="bg-white ml-20 mr-20 mt-2 rounded-xl text-center">
+          <h2>(SV)</h2>
+          <h2>PV-EV</h2>
+          <h2>0.95</h2>
+        </div>
       </div>
     </div>
   );

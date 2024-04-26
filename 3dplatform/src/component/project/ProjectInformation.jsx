@@ -12,6 +12,7 @@ const ProjectInformation = () => {
     totalBudget,
     getDataSheet,
   } = useContext(ViewerContext);
+    console.log("🚀 ~ ProjectInformation ~ selectedProject:", selectedProject);
   const openModal = () => setIsMoldalOpen(true);
 
   useEffect(() => {

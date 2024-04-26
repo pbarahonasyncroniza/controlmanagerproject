@@ -19,12 +19,14 @@ const PurchaseOrderTable = () => {
     selectedProjectId,
     selectedFamily,
     formatCurrency,
-   
+    setTotalPurchaseOrders,
   } = useContext(ViewerContext);
   const [newfilteredMaterialSheets, setNewFilteredMaterialSheets] = useState(
     []
   );
-  const [newAccumulatedPurchaseOrders, setNewAccumulatedPurchaseOrders] = useState([])
+  const [newAccumulatedPurchaseOrders, setNewAccumulatedPurchaseOrders] =
+    useState([]);
+
   const theme = useTheme({
     HeaderRow: `
                 background-color: #eaf5fd;
@@ -60,9 +62,23 @@ const PurchaseOrderTable = () => {
     setNewAccumulatedPurchaseOrders(acumulado);
   }, [materialSheets, selectedProjectId, selectedFamily, selectedSubfamily]);
 
+  useEffect(() => {
+    let total = 0;
+
+    newfilteredMaterialSheets.forEach((sheet) => {
+      total += parseFloat(sheet.total) || 0;
+    });
+
+    setTotalPurchaseOrders(total);
+  }, [newfilteredMaterialSheets]);
   return (
-    <div className="bg-white p-3 rounded-xl ml-3 ">
-       <h1 className="text-xl font-semibold ">ORDENES DE COMPRA</h1>
+    <div className="bg-white p-3 rounded-xl ml-3 flex flex-col">
+      <div className="flex justify-end p-4 ">
+        <h1 className="bg-cyan-700 text-3xl text-white p-6 rounded-xl ">
+          {formatCurrency(newAccumulatedPurchaseOrders)}
+        </h1>
+      </div>
+      <h1 className="text-xl font-semibold ">ORDENES DE COMPRA</h1>
       <div>
         <Table data={dataNode} theme={theme}>
           {() => (

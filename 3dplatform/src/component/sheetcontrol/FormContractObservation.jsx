@@ -98,9 +98,9 @@ const FormContractObservation = () => {
                     className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
                     placeholder="ProjectId"
                     type="text"
-                    name="projectId"
                     value={projectId}
                     onChange={(e) => setProjectId(e.target.value)}>
+                    <option value="Proyecto">Proyecto</option>
                     <option value="PT-101">PT-101</option>
                     <option value="TR-222">TR-222</option>
                   </select>
@@ -150,16 +150,17 @@ const FormContractObservation = () => {
               </select>
             </label>
 
-            <label className="text-lg text-white font-bolt mb-2 ">glosa</label>
-            <input
-              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="glosa"
-              type="text"
-              name="glosa"
-              value={glosa}
-              onChange={(e) => setGlosa(e.target.value)}
-            />
-
+            <label className="text-lg text-white font-bolt mb-2 ">
+              glosa
+              <input
+                className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="glosa"
+                type="text"
+                name="glosa"
+                value={glosa}
+                onChange={(e) => setGlosa(e.target.value)}
+              />
+            </label>
             <label className="text-lg text-white font-bolt mb-2 ">
               descripcion
               <input
@@ -171,17 +172,17 @@ const FormContractObservation = () => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </label>
-              <label className="text-lg text-white font-bolt mb-2 ">
-                proyectado
-            <input
-              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="proyectado"
-              type="text"
-              name="proyectado"
-              value={proyectado}
-              onChange={(e) => setProyectado(e.target.value)}
+            <label className="text-lg text-white font-bolt mb-2 ">
+              proyectado
+              <input
+                className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="proyectado"
+                type="text"
+                name="proyectado"
+                value={proyectado}
+                onChange={(e) => setProyectado(e.target.value)}
               />
-              </label>
+            </label>
             <div className="flex justify-between">
               <button
                 className="bg-green-500 font-semibold rounded-xl text-white p-3 mt-2  mb-2"

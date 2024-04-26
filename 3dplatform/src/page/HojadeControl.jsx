@@ -6,6 +6,7 @@ import Invoices from "../component/tables/Invoices";
 import PurchaseOrderTable from "../component/tables/PurchaseOrderTable";
 import ContractObservationByForm from "../component/tables/ContractObservationByForm";
 import IncreaseAndDiscountByForm from "../component/tables/IncreaseAndDiscountByForm";
+import AlertInvoicePurchaseOrder from "../component/alert/AlertInvoicePurchaseOrder";
 
 const HojadeControl = () => {
   return (
@@ -15,6 +16,7 @@ const HojadeControl = () => {
         <MaterialSheetsControl />
         <IdentificationHeader />
         <CarsInformationSheets />
+        <AlertInvoicePurchaseOrder />
         <div className="grid grid-cols-2">
           <ContractObservationByForm />
           <IncreaseAndDiscountByForm />

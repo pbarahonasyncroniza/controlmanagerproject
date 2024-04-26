@@ -87,6 +87,7 @@ function FormIncreaseAndDiscount() {
                     type="text"
                     value={projectId}
                     onChange={(e) => setProjectId(e.target.value)}>
+                    <option value="Proyecto">Proyecto</option>
                     <option value="PT-101">PT-101</option>
                     <option value="TR-222">TR-222</option>
                   </select>
@@ -153,6 +154,7 @@ function FormIncreaseAndDiscount() {
                 name="aumentodisminucion"
                 value={aumentodisminucion}
                 onChange={(e) => setAumentoDisminucion(e.target.value)}>
+                <option value="Elegir Opcion">Elegir Opcion</option>
                 <option value="Aumento">Aumento</option>
                 <option value="Disminucion">Disminucion</option>
               </select>
@@ -167,15 +169,15 @@ function FormIncreaseAndDiscount() {
             </label>
             <label className="text-lg text-white font-bolt mb-2 ">
               Recuperable
+              <input
+                className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
+                placeholder="recuperable"
+                type="text"
+                name="recuperable"
+                value={recuperable}
+                onChange={(e) => setRecuperable(e.target.value)}
+              />
             </label>
-            <input
-              className="bg-slate-700 rounded-lg mb-2 mt-2 flex mr-2 p-2 text-white border-solid border-4 border-gray-500"
-              placeholder="recuperable"
-              type="text"
-              name="recuperable"
-              value={recuperable}
-              onChange={(e) => setRecuperable(e.target.value)}
-            />
             <label className="text-lg text-white font-bolt mb-2 ">
               Observaciones
               <input

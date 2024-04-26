@@ -15,6 +15,8 @@ const MaterialSheetsControl = () => {
     selectedProjectId,
     setTotalBySubFamily,
   } = useContext(ViewerContext);
+    console.log("🚀 ~ MaterialSheetsControl ~ selectedSubfamily:", selectedSubfamily);
+    console.log("🚀 ~ MaterialSheetsControl ~ selectedProjectId:", selectedProjectId);
   const [familySubfamilyMap, setFamilySubfamilyMap] = useState({});
 
   useEffect(() => {
