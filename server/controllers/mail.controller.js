@@ -28,7 +28,7 @@ export const sendSPIAlert = async (req, res) => {
 
     // Configuración de las opciones del correo
     const mailOptions = {
-      from: "pbarahona@syncroniza.net",
+      from: "pbarahonasyncroniza@gmail.com",
       to: "pbarahonafullstack@gmail.com,pbarahona.tres@gmail.com",
       subject: "SPI alert",
       text: message,

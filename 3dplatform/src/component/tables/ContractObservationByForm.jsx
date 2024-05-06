@@ -20,6 +20,7 @@ const ContractObservationByForm = () => {
     setCurrentIdContract,
     formatCurrency,
   } = useContext(ViewerContext);
+  console.log("🚀 ~ ContractObservationByForm ~ data:", data);
   console.log(
     "🚀 ~ ContractObservationByForm ~ setIsModalOpenContract:",
     setIsModalOpenContract
@@ -28,12 +29,10 @@ const ContractObservationByForm = () => {
   // const [editingContract, setEditingContract] = useState("");
 
   const openModal = () => setIsModalOpenContract(true);
-  console.log(
-    "🚀 ~ ContractObservationByForm ~ setIsModalOpenContract:",
-    setIsModalOpenContract
-  );
-  console.log("🚀 ~ ContractObservationByForm ~ openModal:", openModal);
 
+
+
+  
   useEffect(() => {
     const fetchContract = async () => {
       try {
@@ -64,14 +63,6 @@ const ContractObservationByForm = () => {
 
   //---------------------------- Delete----------------------------//
   const handleDeleContractObservations = async (contractid) => {
-    console.log(
-      "🚀 ~ handleDeleContractObservations ~ contractid:",
-      contractid
-    );
-    console.log(
-      "🚀 ~ handleDeleContractObservations ~ contractid:",
-      contractid
-    );
     const isConfirmed = window.confirm(
       "Esta seguro que quiere borrar el Registro ?"
     );
@@ -95,10 +86,11 @@ const ContractObservationByForm = () => {
       console.error("Error deleting invoice:", err);
     }
   };
-  //--------------------- Update Form ----------------------//
+  //---------------------Open and  Update Form ----------------------//
   const openFormAndCurrentContractId = (contractId) => {
     // Encuentra el contract específica por su ID
     const contractToEdit = data.find((contract) => contract._id === contractId);
+    console.log("🚀 ~ openFormAndCurrentContractId ~ data:", data);
 
     if (contractToEdit) {
       // setEditingContract(contractToEdit);
@@ -113,6 +105,7 @@ const ContractObservationByForm = () => {
       setIsEditMode(true);
       setIsModalOpenContract(true);
     }
+      console.log("🚀 ~ openFormAndCurrentContractId ~ contractToEdit._id:", contractToEdit._id);
   };
   //---------------------------------------------------------------------------//
 

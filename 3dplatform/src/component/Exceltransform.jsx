@@ -15,23 +15,23 @@ const Exceltransform = ({ UrlEndpoint }) => {
       if (excelFile) {
         const formData = new FormData();
         formData.append("excelfile", excelFile);
-        console.log("Archivo adjunto:", formData.get("excelfile"));
+        formData.append("formattedDate", new Date());
+
         const response = await axios.post(UrlEndpoint, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
 
-        console.log("responsExcel", response.data);
+        console.log("responseExcel", response.data);
       }
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
     }
   };
-
   return (
     <div>
-      <div className="flex ">
+      <div className=" bg-white p-2 rounded-xl">
         <h2 className="text-xs mt-2 gap-2 ml-2">Cargar Datos Excel</h2>
         <input
           className="mt-2 ml-2 text-xs bg-gray-300 mr-2 rounded-lg px-1
@@ -43,7 +43,8 @@ const Exceltransform = ({ UrlEndpoint }) => {
         <button
           type="button"
           className=" text-sm mt-2 bg-blue-500 p-1 rounded-lg text-white"
-          onClick={handleUpload}>
+          onClick={handleUpload}
+        >
           Subir Excel
         </button>
       </div>

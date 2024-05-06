@@ -1,5 +1,5 @@
 import Sidebardb from "../component/dashboard/Sidebardb";
-import FormAreaChart from "../component/dashboard/FormAreaChart";
+import FormAreaChart from "../component/sheetcontrol/FormAreaChart";
 
 const Dashboard = () => {
   return (

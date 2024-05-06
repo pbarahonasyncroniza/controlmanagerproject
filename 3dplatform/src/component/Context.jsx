@@ -65,6 +65,11 @@ const ViewerProvider = ({ children }) => {
     useState("");
   const [isModalOpenContract, setIsModalOpenContract] = useState("");
   const [totalPurchaseOrders, setTotalPurchaseOrders] = useState(0);
+  const [totalByWeek, setTotalByWeek] = useState({});
+  const [isModalOpenProgress, setIsModalOpenProgress] = useState(false);
+  const [currentProgressId, setCurrentIdProgress] = useState("");
+  const [combinedData, setCombinedData] = useState([]);
+  const [aernValueAccumalated, setEarnValueAccumulated] = useState([]);
 
   const [filters, setFilters] = useState({
     projectId: "",
@@ -349,6 +354,16 @@ const ViewerProvider = ({ children }) => {
         setIsModalOpenContract,
         totalPurchaseOrders,
         setTotalPurchaseOrders,
+        totalByWeek,
+        setTotalByWeek,
+        isModalOpenProgress,
+        setIsModalOpenProgress,
+        currentProgressId,
+        setCurrentIdProgress,
+        combinedData,
+        setCombinedData,
+        aernValueAccumalated,
+        setEarnValueAccumulated,
       }}>
       {children}
     </ViewerContext.Provider>

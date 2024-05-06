@@ -1,44 +1,82 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { ViewerContext } from "../Context";
 import axios from "axios";
-
+import Exceltransform from "../Exceltransform";
+import FormAreaChart from "../sheetcontrol/FormAreaChart";
+import ActualCostTable from "../tables/ActualCostTable";
 import {
-  AreaChart,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  Area,
-  ResponsiveContainer,
+  Legend,
 } from "recharts";
 
 const MainAreaChart = () => {
-  const [dataProgress, setDataProgress] = useState([]);
-  const [sortOrder, setSortOrder] = useState("asc");
+  const {
+    totalByWeek,
+    formatCurrency,
+    setProjectId,
+    setIsEditMode,
+    setIsModalOpenProgress,
+    setCurrentIdProgress,
+    combinedData,
+    setCombinedData,
+    aernValueAccumalated,
+    setEarnValueAccumulated,
+  } = useContext(ViewerContext);
+    console.log("🚀 ~ MainAreaChart ~ aernValueAccumalated:", aernValueAccumalated);
+  console.log("🚀 ~ MainAreaChart ~ combinedData:", combinedData);
 
-  const sortData = (data, order) => {
-    return [...data].sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      return order === "asc" ? dateA - dateB : dateB - dateA;
-    });
+  const [dataProgress, setDataProgress] = useState([]);
+
+  const [totalEarnValue, setTotalEarnValue] = useState("");
+  console.log("🚀 ~ MainAreaChart ~ totalEarnValue:", totalEarnValue);
+  const [totalPlanValue, setTotalPlanValue] = useState(0);
+  console.log("🚀 ~ MainAreaChart ~ totalPlanValue:", totalPlanValue);
+
+  // const openModal = () => setIsModalOpenProgress(true);
+
+  //---------------------Open and  Update Form ----------------------//
+  const openFormAndCurrentProgressId = (progressId) => {
+    // Encuentra el contrato específico por su ID
+    const progressToEdit = dataProgress.find(
+      (progress) => progress._id === progressId
+    );
+    if (progressToEdit) {
+      setProjectId(progressToEdit.projectId);
+      setCurrentIdProgress(progressToEdit._id);
+      setIsEditMode(true);
+      setIsModalOpenProgress(true);
+    }
   };
+  //---------------------------------------------------------------------------//
 
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/admin");
-        // console.log("respuesta del servidr", response.data);
+        const response = await axios.get("http://localhost:8000/progress/");
+
         if (
           Array.isArray(response.data.data) &&
           response.data.data.length > 0
         ) {
           const formatData = response.data.data.map((item) => ({
-            date: item.date,
-            PlanValue: item.planValue,
+            _id: item._id,
+            projectId: item.projectId,
+            week: item.week,
+            dateStart: new Date(item.dateStart),
+            finishdate: new Date(item.finishdate),
+            planValue: item.planValue,
             earnValue: item.earnValue,
+            actualCost: item.actualCost,
           }));
-          const sortedData = sortData(formatData, sortOrder);
-          setDataProgress(sortedData);
+
+          // Ordenar las fechas por dateStart de manera ascendente
+          formatData.sort((a, b) => a.dateStart - b.dateStart);
+          setDataProgress(formatData);
         } else {
           console.error(
             "Respuesta no es un arreglo o está vacío",
@@ -50,98 +88,271 @@ const MainAreaChart = () => {
       }
     };
     fetchProgress();
-  }, [sortOrder]);
+  }, []);
+  //------------------------------Combine Data --------------------------------//
+  useEffect(() => {
+    // Combinar los datos de dataProgress y totalByWeek en la estructura necesaria
+    const combinedData = dataProgress.map((item) => ({
+      _id: item._id,
+      projectId: item.projectId,
+      dateStart: item.dateStart,
+      finishdate: item.finishdate,
+      week: item.week,
+      planValue: item.planValue,
+      totalByWeekValue: totalByWeek[item.week] || 0,
+      earnValue: item.earnValue,
+      
+    }));
+
+    setCombinedData(combinedData);
+  }, [dataProgress, totalByWeek]);
+
+  
+
+  //--------------------- Calculo de Acumulados  --------------------------------------/
+
+  useEffect(() => {
+    let acumuladoEarn = 0;
+    let acumuladoActualCost = 0;
+    let acumuladoPlanValue = 0;
+
+    // Calcula el total de EarnValue
+    const totalEarnValue = combinedData.reduce(
+      (acc, item) => acc + (item.earnValue || 0),
+      0
+    );
+    setTotalEarnValue(totalEarnValue);
+
+    // Calcula el total de planValue
+    const totalPlanValue = combinedData.reduce(
+      (acc, item) => acc + (item.planValue || 0),
+      0
+    );
+    setTotalPlanValue(totalPlanValue);
+
+    const newArray = combinedData.map((item) => {
+      acumuladoEarn += item.earnValue || 0;
+      acumuladoActualCost += totalByWeek[item.week] || 0;
+      acumuladoPlanValue += item.planValue || 0;
+
+      return {
+        ...item,
+        acumuladoEarn,
+        acumuladoActualCost,
+        acumuladoPlanValue
+      };
+    });
+
+    setEarnValueAccumulated(newArray);
+  }, [combinedData, totalByWeek]);
+  //--------------------- Date transformation format ------------------------------//
+
+  const newArray = dataProgress.map((item) => {
+    // Obtenemos la fecha dateStart del objeto actual
+    const dateStart = new Date(item.dateStart);
+
+    // Obtenemos el número de semana del año
+    const weekOfYear = getWeekNumber(dateStart);
+
+    // Creamos un nuevo objeto con la semana del año y el planValue
+    return {
+      semana: weekOfYear,
+      planValue: item.planValue,
+    };
+  });
+
+  // Función para obtener el número de semana del año
+  function getWeekNumber(date) {
+    const oneJan = new Date(date.getFullYear(), 0, 1);
+    const timeDiff = date - oneJan;
+    const dayOfYear = Math.ceil(timeDiff / 86400000);
+    return Math.ceil(dayOfYear / 7);
+  }
+
+  // El nuevo arreglo con la información requerida
+  console.log(newArray);
+
+  // ---------------------------------------------------------------------------------------------------------//
+
+  const formatedDate = (isoDate) => {
+    if (!isoDate) return "";
+
+    const date = new Date(isoDate);
+    const day = date.getUTCDate();
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear();
+
+    const formattedDay = String(day).padStart(2, "0");
+    const formattedMonth = String(month).padStart(2, "0");
+
+    return `${formattedDay}/${formattedMonth}/${year}`;
+  };
 
   return (
-    <div className="mt-10 flex ">
-      <ResponsiveContainer width="70%" height={500}>
-        <h2 className="text-indigo-800 font-bold text-2xl">
-          Planed Value vs Earn Value
-        </h2>
-        <AreaChart
-          data={dataProgress}
-          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-          <defs>
-            <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-            </linearGradient>
-            <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="date" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="PlanValue"
-            stroke="#8884d8"
-            fillOpacity={1}
-            fill="url(#colorUv)"
+    <div className=" mt-10 ml-10">
+      <FormAreaChart />
+      {/* <button
+        onClick={openModal}
+        className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          dataslot="icon"
+          className="w-4 h-4">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
           />
-          <Area
-            type="monotone"
-            dataKey="earnValue"
-            stroke="#82ca9d"
-            fillOpacity={1}
-            fill="url(#colorPv)"
-          />
-          {/* <Area
-            type="monotone"
-            dataKey="amt"
-            stroke="#dc2626"
-            fillOpacity={1}
-            fill="url(#colorPv)"
-          /> */}
-        </AreaChart>
-      </ResponsiveContainer>
+        </svg>{" "}
+        Nuevo Registro
+      </button> */}
+      <h2 className="text-indigo-800 font-bold text-2xl">
+        Planed Value vs Earn Value
+      </h2>
+      <LineChart
+        width={800}
+        height={500}
+        data={aernValueAccumalated}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}>
+        <CartesianGrid strokeDasharray="5 5" />
+        <XAxis dataKey="dateStart" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="acumuladoPlanValue" stroke="#8884d8" />
+        <Line type="monotone" dataKey="acumuladoActualCost" stroke="#e4122e" />
+        <Line type="monotone" dataKey="acumuladoEarn" stroke="#82ca9d" />
+      </LineChart>
+
+      <div>
+        <Exceltransform UrlEndpoint="http://localhost:8000/progress/" />
+      </div>
+
       <div className="ml-5 ">
         <h1 className="text-2xl text-blue-800 font-bold mt-4 ">
           Progress Information
         </h1>
-        <table className="table-auto mt-4 border-collapse border border-slate-500 ml-2">
+        <h1>{formatCurrency(totalPlanValue)}</h1>
+        <table className="">
           <thead>
             <tr>
-              <th className="border border-slate-500 px-4 text-lg ">Date</th>
-              <th className="border border-slate-500 px-4 text-lg">
-                Earn Value
+              <th className="border border-slate-500 px-4 text-lg text-black ">
+                ProjectId
+              </th>
+              <th className="border border-slate-500 px-4 text-lg text-black ">
+                Start Date
+              </th>
+              <th className="border border-slate-500 px-4 text-lg text-black ">
+                Finish Date
               </th>
               <th className="border border-slate-500 px-4 text-lg">
                 Plan Value
               </th>
-              <th className="border border-slate-500 px-4 text-lg">SV</th>
-              <th className="border border-slate-500 px-4 text-lg">SPI</th>
+              <th className="border border-slate-500 px-4 text-lg">
+                Plan Value Accumulated
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                % Plan Value
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                Earn Value
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                Earn Value Accumulated
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                % Earn Value
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                Actual Cost
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                Actual Cost Accumulated
+              </th>
+              <th className="border border-slate-500 px-4 text-lg">
+                % Actual Cost Accumulated
+              </th>
             </tr>
           </thead>
           <tbody>
-            {dataProgress.map((item, index) => (
-              <tr key={index}>
+            {aernValueAccumalated.map((progress) => (
+              <tr key={progress._id}>
                 <td className="border border-slate-500 text-center text-sm ">
-                  {item.date}
+                  {progress.projectId}
                 </td>
                 <td className="border border-slate-500 text-center text-sm ">
-                  
-                  {item.PlanValue}
+                  {formatedDate(progress.dateStart)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm ">
+                  {formatedDate(progress.finishdate)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm ">
+                  {formatCurrency(progress.planValue)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm ">
+                  {formatCurrency(progress.acumuladoPlanValue)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm ">
+                  {((progress.acumuladoPlanValue/totalPlanValue)*100).toFixed(2)}%
                 </td>
                 <td className="border border-slate-500 text-center text-sm">
-                  {item.earnValue}
+                  {formatCurrency(progress.earnValue)}
                 </td>
                 <td className="border border-slate-500 text-center text-sm">
-                  {parseFloat(item.earnValue) - parseFloat(item.PlanValue)}
+                  {formatCurrency(progress.acumuladoEarn)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm">
+                  {((progress.acumuladoEarn / totalPlanValue) * 100).toFixed(2)}
+                  %
+                </td>
+                <td className="border border-slate-500 text-center text-sm">
+                  {formatCurrency(progress.totalByWeekValue)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm">
+                  {formatCurrency(progress.acumuladoActualCost)}
                 </td>
                 <td className="border border-slate-500 text-center text-sm">
                   {(
-                    parseFloat(item.earnValue) / parseFloat(item.PlanValue)
+                    (progress.acumuladoActualCost / totalPlanValue) *
+                    100
                   ).toFixed(2)}
+                  %
+                </td>
+                <td>
+                  <button
+                    className="bg-green-500 p-1 text-white rounded-lg text-sm"
+                    onClick={() => openFormAndCurrentProgressId(progress._id)}>
+                    {/* Icono de edición */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <ActualCostTable /> 
     </div>
   );
 };

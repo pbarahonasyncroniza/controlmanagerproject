@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ViewerContext } from "../Context";
 import Sidebardb from "../dashboard/Sidebardb";
 import FormInvoices from "../sheetcontrol/FormInvoices";
@@ -13,8 +13,11 @@ const InvicesMasterTable = () => {
     openFormAndCurrentInvloiceId,
     formatCurrency,
     isModalOpenBudget,
+    totalByWeek,
   } = useContext(ViewerContext);
   const openModal = () => setIsModalOpenBudget(true);
+
+  console.log("🚀 ~ InvicesMasterTable ~ totalByWeek:", totalByWeek);
 
   const fetchInvoices = async () => {
     try {
@@ -59,24 +62,24 @@ const InvicesMasterTable = () => {
     }
   };
 
+  // ---------------------------------------------------------------------------------------------------------//
+
   const formatedDate = (isoDate) => {
-    if (!isoDate) return "";
+    if (!isoDate) return '';
 
-    // Crear la fecha en base al isoDate
     const date = new Date(isoDate);
-
-    // Usar getUTC* en lugar de get* para obtener la fecha en UTC
     const day = date.getUTCDate();
-    const month = date.getUTCMonth() + 1; // getUTCMonth() devuelve un índice basado en cero (0-11)
+    const month = date.getUTCMonth() + 1;
     const year = date.getUTCFullYear();
 
-    // Formatea el día y el mes para asegurar que tengan dos dígitos
-    const formattedDay = String(day).padStart(2, "0");
-    const formattedMonth = String(month).padStart(2, "0");
+    const formattedDay = String(day).padStart(2, '0');
+    const formattedMonth = String(month).padStart(2, '0');
 
-    // Retorna la fecha formateada como "día/mes/año"
     return `${formattedDay}/${formattedMonth}/${year}`;
-  };
+};
+
+
+
 
   return (
     <div className="flex">

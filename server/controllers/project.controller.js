@@ -1,6 +1,3 @@
-
-
-
 import { Types, Error } from "mongoose";
 const { ObjectId } = Types;
 import { ProjectModel } from "../models/project.models.js";

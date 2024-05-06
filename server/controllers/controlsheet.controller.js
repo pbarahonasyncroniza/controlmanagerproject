@@ -31,15 +31,13 @@ export function getAllSheet(req, res) {
 
 export function handleCreateBudgetError(res, error) {
   console.error(error);
-  res.status(500).json({ error: 'Error al procesar la solicitud.' });
+  res.status(500).json({ error: "Error al procesar la solicitud." });
 }
-
 
 // Funcion que toma archivo excel de carga masiva y lo lleva a BD
 export function createSheet(req, res) {
-  
   let data = req.body;
-  const file= req.file
+  const file = req.file;
   // console.log('Data:', data);
   // console.log('File:', file);
 
@@ -49,34 +47,34 @@ export function createSheet(req, res) {
       // Leer el archivo Excel y convertirlo a JSON
       const jsonData = convertExcelToJson(file.buffer);
 
-      console.log('Ruta del archivo:', file.buffer);
+      console.log("Ruta del archivo:", file.buffer);
 
       // Crear el presupuesto utilizando los datos del archivo JSON
       ControlSheetModel.create(jsonData)
         .then((createdData) => {
-          res.json({ data: createdData, message: 'Datos creados exitosamente desde Excel.' });
+          res.json({
+            data: createdData,
+            message: "Datos creados exitosamente desde Excel.",
+          });
         })
         .catch((error) => {
           handleCreateBudgetError(res, error);
         });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Error al leer el archivo Excel.' });
+      res.status(500).json({ error: "Error al leer el archivo Excel." });
     }
   } else {
     // Crear el presupuesto utilizando los datos de la solicitud
     ControlSheetModel.create(data)
       .then((createdData) => {
-        res.json({ data: createdData, message: 'Datos creados exitosamente.' });
+        res.json({ data: createdData, message: "Datos creados exitosamente." });
       })
       .catch((error) => {
         handleCreateBudgetError(res, error);
       });
   }
 }
-
-
-
 
 export function getOneSheet(req, res) {
   let id = req.params.id;
