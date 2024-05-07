@@ -70,6 +70,8 @@ const ViewerProvider = ({ children }) => {
   const [currentProgressId, setCurrentIdProgress] = useState("");
   const [combinedData, setCombinedData] = useState([]);
   const [aernValueAccumalated, setEarnValueAccumulated] = useState([]);
+  const [totalPlanValue, setTotalPlanValue] = useState(0);
+  const [projectDuration, setProjectDuration] = useState(0);
 
   const [filters, setFilters] = useState({
     projectId: "",
@@ -364,6 +366,10 @@ const ViewerProvider = ({ children }) => {
         setCombinedData,
         aernValueAccumalated,
         setEarnValueAccumulated,
+        totalPlanValue,
+        setTotalPlanValue,
+        projectDuration,
+        setProjectDuration,
       }}>
       {children}
     </ViewerContext.Provider>

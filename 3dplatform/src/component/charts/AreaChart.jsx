@@ -26,15 +26,20 @@ const MainAreaChart = () => {
     setCombinedData,
     aernValueAccumalated,
     setEarnValueAccumulated,
+    totalPlanValue,
+    setTotalPlanValue,
+    projectDuration,
   } = useContext(ViewerContext);
-    console.log("🚀 ~ MainAreaChart ~ aernValueAccumalated:", aernValueAccumalated);
+  console.log(
+    "🚀 ~ MainAreaChart ~ aernValueAccumalated:",
+    aernValueAccumalated
+  );
   console.log("🚀 ~ MainAreaChart ~ combinedData:", combinedData);
 
   const [dataProgress, setDataProgress] = useState([]);
 
   const [totalEarnValue, setTotalEarnValue] = useState("");
   console.log("🚀 ~ MainAreaChart ~ totalEarnValue:", totalEarnValue);
-  const [totalPlanValue, setTotalPlanValue] = useState(0);
   console.log("🚀 ~ MainAreaChart ~ totalPlanValue:", totalPlanValue);
 
   // const openModal = () => setIsModalOpenProgress(true);
@@ -101,13 +106,10 @@ const MainAreaChart = () => {
       planValue: item.planValue,
       totalByWeekValue: totalByWeek[item.week] || 0,
       earnValue: item.earnValue,
-      
     }));
 
     setCombinedData(combinedData);
   }, [dataProgress, totalByWeek]);
-
-  
 
   //--------------------- Calculo de Acumulados  --------------------------------------/
 
@@ -139,7 +141,7 @@ const MainAreaChart = () => {
         ...item,
         acumuladoEarn,
         acumuladoActualCost,
-        acumuladoPlanValue
+        acumuladoPlanValue,
       };
     });
 
@@ -187,35 +189,17 @@ const MainAreaChart = () => {
 
     return `${formattedDay}/${formattedMonth}/${year}`;
   };
+  //---------------------------------------SPI---------------------
 
   return (
     <div className=" mt-10 ml-10">
       <FormAreaChart />
-      {/* <button
-        onClick={openModal}
-        className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          dataslot="icon"
-          className="w-4 h-4">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>{" "}
-        Nuevo Registro
-      </button> */}
       <h2 className="text-indigo-800 font-bold text-2xl">
         Planed Value vs Earn Value
       </h2>
       <LineChart
-        width={800}
-        height={500}
+        width={1800}
+        height={800}
         data={aernValueAccumalated}
         margin={{
           top: 5,
@@ -237,49 +221,57 @@ const MainAreaChart = () => {
         <Exceltransform UrlEndpoint="http://localhost:8000/progress/" />
       </div>
 
-      <div className="ml-5 ">
+      <div className="ml-5 overflow-y-scroll max-h-[500px] sticky">
         <h1 className="text-2xl text-blue-800 font-bold mt-4 ">
           Progress Information
         </h1>
-        <h1>{formatCurrency(totalPlanValue)}</h1>
-        <table className="">
+        <table className="sticky">
           <thead>
-            <tr>
-              <th className="border border-slate-500 px-4 text-lg text-black ">
+            <tr className="sticky">
+              <th className="sticky border border-slate-500 px-4 text-lg text-black ">
                 ProjectId
               </th>
-              <th className="border border-slate-500 px-4 text-lg text-black ">
+              <th className="sticky border border-slate-500 px-4 text-lg text-black ">
+                Project Week
+              </th>
+              <th className="sticky border border-slate-500 px-4 text-lg text-black ">
                 Start Date
               </th>
-              <th className="border border-slate-500 px-4 text-lg text-black ">
+              <th className="sticky border border-slate-500 px-4 text-lg text-black ">
                 Finish Date
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Plan Value
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Plan Value Accumulated
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 % Plan Value
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Earn Value
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Earn Value Accumulated
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 % Earn Value
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Actual Cost
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 Actual Cost Accumulated
               </th>
-              <th className="border border-slate-500 px-4 text-lg">
+              <th className="sticky border border-slate-500 px-4 text-lg">
                 % Actual Cost Accumulated
+              </th>
+              <th className="sticky border border-slate-500 px-4 text-lg">
+                SPI (EV/PV)
+              </th>
+              <th className="sticky border border-slate-500 px-4 text-lg">
+                EAC (Estimacion a termino)días
               </th>
             </tr>
           </thead>
@@ -288,6 +280,9 @@ const MainAreaChart = () => {
               <tr key={progress._id}>
                 <td className="border border-slate-500 text-center text-sm ">
                   {progress.projectId}
+                </td>
+                <td className="border border-slate-500 text-center text-sm ">
+                  {progress.week}
                 </td>
                 <td className="border border-slate-500 text-center text-sm ">
                   {formatedDate(progress.dateStart)}
@@ -302,10 +297,31 @@ const MainAreaChart = () => {
                   {formatCurrency(progress.acumuladoPlanValue)}
                 </td>
                 <td className="border border-slate-500 text-center text-sm ">
-                  {((progress.acumuladoPlanValue/totalPlanValue)*100).toFixed(2)}%
+                  {(
+                    (progress.acumuladoPlanValue / totalPlanValue) *
+                    100
+                  ).toFixed(2)}
+                  %
                 </td>
-                <td className="border border-slate-500 text-center text-sm">
+                <td className="border border-slate-500 text-center text-sm grid grid-cols-2 ">
                   {formatCurrency(progress.earnValue)}
+                  <button
+                    className="bg-green-500 p-1 ml-3 mr-3 text-white rounded-lg text-sm flex justify-center"
+                    onClick={() => openFormAndCurrentProgressId(progress._id)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-3 h-3 ">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  </button>
                 </td>
                 <td className="border border-slate-500 text-center text-sm">
                   {formatCurrency(progress.acumuladoEarn)}
@@ -327,32 +343,25 @@ const MainAreaChart = () => {
                   ).toFixed(2)}
                   %
                 </td>
+                <td className="border border-slate-500 text-center text-sm">
+                  {(
+                    progress.acumuladoEarn / progress.acumuladoPlanValue
+                  ).toFixed(2)}
+                </td>
+                <td className="border border-slate-500 text-center text-sm">
+                  {(
+                    projectDuration /
+                    (progress.acumuladoEarn / progress.acumuladoPlanValue)
+                  ).toFixed(2)}
+                </td>
                 <td>
-                  <button
-                    className="bg-green-500 p-1 text-white rounded-lg text-sm"
-                    onClick={() => openFormAndCurrentProgressId(progress._id)}>
-                    {/* Icono de edición */}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5">
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
-                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <ActualCostTable /> 
+      {/* <ActualCostTable /> */}
     </div>
   );
 };
