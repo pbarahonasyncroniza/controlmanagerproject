@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { ViewerContext } from "../Context";
 import FormIncreaseAndDiscount from "../sheetcontrol/FormIncreaseAndDiscount";
@@ -20,11 +20,15 @@ const IncreaseAndDiscountByForm = () => {
     formatCurrency,
     dataIncreaseDiscount,
     setDataIncreaseDiscount,
+    dataincreaseDisccountwthitoutfilter,
+    setDataincreaseDisccountwhithoutfilter,
   } = useContext(ViewerContext);
+    console.log("🚀 ~ IncreaseAndDiscountByForm ~ dataincreaseDisccountwthitoutfilter:", dataincreaseDisccountwthitoutfilter);
   console.log(
     "🚀 ~ IncreaseAndDiscountByForm ~ dataIncreaseDiscount:",
     dataIncreaseDiscount
   );
+ 
 
   const openModal = () => setIsModalOpenBudget(true);
 
@@ -34,6 +38,7 @@ const IncreaseAndDiscountByForm = () => {
         const response = await axios.get(
           "http://localhost:8000/increasediscount/"
         );
+        console.log("🚀 ~ fetchContract ~ response:", response);
 
         if (
           Array.isArray(response.data.data) &&
@@ -51,6 +56,7 @@ const IncreaseAndDiscountByForm = () => {
           );
 
           setDataIncreaseDiscount(filteredData);
+          setDataincreaseDisccountwhithoutfilter(response);
         } else {
           console.error("No se encontraron datos", response);
         }
@@ -64,7 +70,10 @@ const IncreaseAndDiscountByForm = () => {
 
   //---------------------------- Delete----------------------------//
   const handleDeleIncreaseAndDiscount = async (increasediscountId) => {
-    console.log("🚀 ~ handleDeleIncreaseAndDiscount ~ increasediscountId:", increasediscountId);
+    console.log(
+      "🚀 ~ handleDeleIncreaseAndDiscount ~ increasediscountId:",
+      increasediscountId
+    );
     const isConfirmed = window.confirm(
       "Esta seguro que quiere borrar el Registro ?"
     );
@@ -96,7 +105,10 @@ const IncreaseAndDiscountByForm = () => {
     const increasediscountToEdit = dataIncreaseDiscount.find(
       (increasediscount) => increasediscount._id === increasediscountid
     );
-    console.log("🚀 ~ openFormAndCurrentIncreaseDiscountId ~ dataIncreaseDiscount:", dataIncreaseDiscount);
+    console.log(
+      "🚀 ~ openFormAndCurrentIncreaseDiscountId ~ dataIncreaseDiscount:",
+      dataIncreaseDiscount
+    );
 
     if (increasediscountToEdit) {
       // setEditingContract(contractToEdit);
@@ -112,7 +124,9 @@ const IncreaseAndDiscountByForm = () => {
   return (
     <div className="bg-white mt-3 ml-3 p-3 rounded-xl">
       <FormIncreaseAndDiscount />
-      <h1 className="text-xl font-semibold ml-3 ">AUMENTO / DISMINUCIONES AL CONTRATO</h1>
+      <h1 className="text-xl font-semibold ml-3 ">
+        AUMENTO / DISMINUCIONES AL CONTRATO
+      </h1>
       <button
         onClick={openModal}
         className="flex  bg-blue-500 mt-2 ml-2 p-2 text-white rounded-lg text-sm gap-2 ">
@@ -215,7 +229,9 @@ const IncreaseAndDiscountByForm = () => {
                     <button
                       className="bg-green-500 p-1 text-white rounded-lg text-sm"
                       onClick={() =>
-                        openFormAndCurrentIncreaseDiscountId(increasediscount._id)
+                        openFormAndCurrentIncreaseDiscountId(
+                          increasediscount._id
+                        )
                       }>
                       {/* Icono de edición */}
                       <svg

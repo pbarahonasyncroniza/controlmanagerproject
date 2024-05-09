@@ -31,7 +31,7 @@ const Exceltransform = ({ UrlEndpoint }) => {
   };
   return (
     <div>
-      <div className=" bg-white p-2 rounded-xl">
+      <div className=" bg-white p-2 rounded-xl mt-2 flex ml-3 mr-2">
         <h2 className="text-xs mt-2 gap-2 ml-2">Cargar Datos Excel</h2>
         <input
           className="mt-2 ml-2 text-xs bg-gray-300 mr-2 rounded-lg px-1

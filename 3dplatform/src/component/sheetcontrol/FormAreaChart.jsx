@@ -85,6 +85,7 @@ const FormAreaChart = () => {
                     name="ProjectId"
                     value={projectId}
                     onChange={(e) => setProjectId(e.target.value)}
+                    disabled 
                   />
                 </label>
                 <label className="text-white">
@@ -96,6 +97,7 @@ const FormAreaChart = () => {
                     name="week"
                     value={week}
                     onChange={(e) => setWeek(e.target.value)}
+                    disabled 
                   />
                 </label>
               </div>{" "}
@@ -108,6 +110,7 @@ const FormAreaChart = () => {
                   name="dateStart"
                   value={dateStart}
                   onChange={(e) => setDateStart(e.target.value)}
+                  disabled 
                 />
               </label>
               <label className="text-white">
@@ -118,6 +121,7 @@ const FormAreaChart = () => {
                   name="date"
                   value={finishdate}
                   onChange={(e) => setFinishDate(e.target.value)}
+                  disabled 
                 />
               </label>
             </div>
@@ -131,6 +135,7 @@ const FormAreaChart = () => {
                   name="planValue"
                   value={planValue}
                   onChange={(e) => setPlanValue(e.target.value)}
+                  disabled 
                 />
               </label>
             </div>
@@ -157,6 +162,7 @@ const FormAreaChart = () => {
                   name="actualCost"
                   value={actualCost}
                   onChange={(e) => setActualCost(e.target.value)}
+                  disabled 
                 />
               </label>
             </div>{" "}

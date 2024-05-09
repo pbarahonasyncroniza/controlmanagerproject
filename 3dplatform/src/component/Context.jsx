@@ -72,7 +72,13 @@ const ViewerProvider = ({ children }) => {
   const [aernValueAccumalated, setEarnValueAccumulated] = useState([]);
   const [totalPlanValue, setTotalPlanValue] = useState(0);
   const [projectDuration, setProjectDuration] = useState(0);
-
+  const [newtotalbySubFamily, setNewTottalBySubFamily] = useState("");
+  const [
+    dataincreaseDisccountwthitoutfilter,
+    setDataincreaseDisccountwhithoutfilter,
+  ] = useState();
+  const [contracObservationWhitOutFilter, setContracObservationWhitOutFilter] =
+    useState("");
   const [filters, setFilters] = useState({
     projectId: "",
     cod: "",
@@ -370,6 +376,12 @@ const ViewerProvider = ({ children }) => {
         setTotalPlanValue,
         projectDuration,
         setProjectDuration,
+        newtotalbySubFamily,
+        setNewTottalBySubFamily,
+        dataincreaseDisccountwthitoutfilter,
+        setDataincreaseDisccountwhithoutfilter,
+        contracObservationWhitOutFilter,
+        setContracObservationWhitOutFilter,
       }}>
       {children}
     </ViewerContext.Provider>

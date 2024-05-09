@@ -10,6 +10,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PayApplication from "./page/PayApplication";
 import Informegerencial from "./page/Informegerencial";
 import MainAreaChart from "./component/charts/AreaChart";
+import ReportControlSheet from "./component/sheetcontrol/ReportControlSheet";
+
 function App() {
   return (
     <BrowserRouter>
@@ -27,12 +29,13 @@ function App() {
 
           <Route path="/" element={<ControlSheet />} />
           <Route path="/Manodeobra" element={<LaborCostControl />} />
-          <Route path="hojadecontrol" element={<HojadeControl />} />
-          <Route path="masterfacturas" element={<InvicesMasterTable />} />
-          <Route path="oc" element={<MainPurchaseOrdes />} />
-          <Route path="eepp" element={<PayApplication />} />
-          <Route path="informe" element={<Informegerencial />} />
-          <Route path="progress" element={<MainAreaChart />} />
+          <Route path="/hojadecontrol" element={<HojadeControl />} />
+          <Route path="/masterfacturas" element={<InvicesMasterTable />} />
+          <Route path="/oc" element={<MainPurchaseOrdes />} />
+          <Route path="/eepp" element={<PayApplication />} />
+          <Route path="/informe" element={<Informegerencial />} />
+          <Route path="/informe/informeHC" element={<ReportControlSheet />} />
+          <Route path="/progress" element={<MainAreaChart />} />
         </Routes>
       </ViewerProvider>
     </BrowserRouter>

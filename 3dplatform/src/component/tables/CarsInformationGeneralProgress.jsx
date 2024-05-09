@@ -66,7 +66,7 @@ function CarsInformationGeneralProgress() {
     <div>
       <div className="mt-3 ml-4 mr-2">
         <select
-          className="rounded-lg p-2 bg-blue-500"
+          className="rounded-lg p-2 bg-blue-500 ml-2"
           value={selectedWeek}
           onChange={(e) => setSelectedWeek(e.target.value)}>
           <option value="">Seleccione una semana</option>
@@ -136,3 +136,5 @@ function CarsInformationGeneralProgress() {
 }
 
 export default CarsInformationGeneralProgress;
+
+

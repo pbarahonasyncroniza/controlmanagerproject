@@ -11,10 +11,15 @@ const CarsInformationSheets = () => {
     dataIncreaseDiscount,
     data,
     totalPaidByProjectFamilySubfamily,
+    newtotalbySubFamily,
+    setNewTottalBySubFamily,
   } = useContext(ViewerContext);
-    
+  
+
   // se genero una nueva forma de calcular el total por subfamily
-  const [newtotalbySubFamily, setNewTottalBySubFamily] = useState("");
+  const [totalTodosContratos, setTotalTodosContratos] = useState(0);
+  console.log("🚀 ~ CarsInformationSheets ~ totalTodosContratos:", totalTodosContratos);
+ 
 
   useEffect(() => {
     const filteredData = getDataBudget.filter((item) => {
@@ -50,21 +55,43 @@ const CarsInformationSheets = () => {
       return total;
     }, 0);
   };
+  // useEffect(() => {
+  //   // Calcular el valor total de los contratos
+  //   const total = data.reduce((total, item) => {
+  //     return total + (Number(item.Proyectado) || 0);
+  //   }, 0);
+  //   console.log("🚀 ~ total ~ data:", data);
+  //   setTotalContratos(total);
+  // }, [data]); // Se actualiza cada vez que cambia 'data'
+
+//  useEffect(() => {
+//     // Calcular el total de los montos de contrato al montar el componente
+//     const total = getTotalMontoContrato();
+//     setTotalContratos(total);
+//   }, [getDataBudget, dataIncreaseDiscount, selectedProjectId, selectedFamily, selectedSubfamily]);
 
   const getTotalMontoContrato = () => {
+    // Realizar el cálculo del total de los montos de contrato
     return data.reduce((total, item) => {
-      const matchesProject =
-        !selectedProjectId || item.projectId === selectedProjectId;
+      console.log("🚀 ~ returndata.reduce ~ data:", data);
+      const matchesProject = !selectedProjectId || item.projectId === selectedProjectId;
       const matchesFamily = !selectedFamily || item.family === selectedFamily;
-      const matchesSubFamily =
-        !selectedSubfamily || item.subfamily === selectedSubfamily;
+      const matchesSubFamily = !selectedSubfamily || item.subfamily === selectedSubfamily;
       if (matchesProject && matchesFamily && matchesSubFamily) {
         return total + (Number(item.Proyectado) || 0);
       }
-      console.log("🚀 ~ returndata.reduce ~ item.totalPrice:", item.totalPrice);
       return total;
     }, 0);
   };
+  useEffect(() => {
+    // Realizar el cálculo del total de los montos de contrato
+    const total = data.reduce((total, item) => {
+      return total + (Number(item.Proyectado) || 0);
+    }, 0);
+    setTotalTodosContratos(total);
+  }, [data]); // Se actualiza cada vez que cambia 'data'
+
+
 
   const cardStylePositive = {
     backgroundColor: "green", // Fondo verde para valores positivos o cero
@@ -83,6 +110,8 @@ const CarsInformationSheets = () => {
   );
   const recuperable = newGetTotalRecuperableFiltered();
   const montoContrato = getTotalMontoContrato();
+ 
+  
 
   const totalconextras = montoPropuesta + newGetTotalRecuperableFiltered();
   const ahorro = totalconextras - montoContrato;
@@ -131,9 +160,7 @@ const CarsInformationSheets = () => {
           </h1>
         </div>
         <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
-          <h1 className="text-lg font-light  text-white">
-            TOTAL CON EXTRAS
-          </h1>
+          <h1 className="text-lg font-light  text-white">TOTAL CON EXTRAS</h1>
           <h1 className="text-3xl font-semibold text-white mt-4">
             {formatCurrency(totalconextras)}
           </h1>
@@ -163,9 +190,7 @@ const CarsInformationSheets = () => {
 
         <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
           <div className="text-lg font-semibold ">
-            <h1 className="text-lg font-light text-white">
-         FACTURAS PAGADAS
-            </h1>
+            <h1 className="text-lg font-light text-white">FACTURAS PAGADAS</h1>
             <h1 className="text-3xl font-semibold mt-4 text-white">
               {formatCurrency(totalPaidByProjectFamilySubfamily)}
             </h1>
@@ -173,9 +198,7 @@ const CarsInformationSheets = () => {
         </div>
         <div className="bg-cyan-700 ml-8 mr-8 mt-4 mb-4  p-6 rounded-xl text-center shadow-xl">
           <div className="text-lg font-semibold text-white">
-            <h1 className="text-lg font-light text-white">
-              SALDO POR PAGAR
-            </h1>
+            <h1 className="text-lg font-light text-white">SALDO POR PAGAR</h1>
             <h1 className="text-3xl font-semibold mt-4 ">
               {formatCurrency(porpagar)}
             </h1>

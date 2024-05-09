@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import axios from "axios";
 import { ViewerContext } from "../Context";
 import FormContractObservation from "../sheetcontrol/FormContractObservation";
@@ -19,20 +19,15 @@ const ContractObservationByForm = () => {
     setIsModalOpenContract,
     setCurrentIdContract,
     formatCurrency,
+    contracObservationWhitOutFilter,
+    setContracObservationWhitOutFilter,
   } = useContext(ViewerContext);
-  console.log("🚀 ~ ContractObservationByForm ~ data:", data);
-  console.log(
-    "🚀 ~ ContractObservationByForm ~ setIsModalOpenContract:",
-    setIsModalOpenContract
-  );
+ 
 
   // const [editingContract, setEditingContract] = useState("");
 
   const openModal = () => setIsModalOpenContract(true);
 
-
-
-  
   useEffect(() => {
     const fetchContract = async () => {
       try {
@@ -50,6 +45,7 @@ const ContractObservationByForm = () => {
           );
 
           setData(filteredData);
+          setContracObservationWhitOutFilter(response);
         } else {
           console.error("No se encontraron datos", response);
         }
@@ -105,7 +101,10 @@ const ContractObservationByForm = () => {
       setIsEditMode(true);
       setIsModalOpenContract(true);
     }
-      console.log("🚀 ~ openFormAndCurrentContractId ~ contractToEdit._id:", contractToEdit._id);
+    console.log(
+      "🚀 ~ openFormAndCurrentContractId ~ contractToEdit._id:",
+      contractToEdit._id
+    );
   };
   //---------------------------------------------------------------------------//
 
